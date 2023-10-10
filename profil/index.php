@@ -146,13 +146,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" name="username" value="<?php echo $username; ?>" readonly>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">New Password:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" name="password" required>
-                </div>
-                <div class="mb-4">
-                    <input type="submit" value="submit" class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full"/>
-                </div>
                 <!-- <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="dob">Date of Birth</label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="dob" type="date" name="dob" value="<?php echo $dob; ?>">

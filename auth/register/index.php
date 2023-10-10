@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="overlap">
                         <div class="text-wrapper">Register</div>
                         <p class="don-t-have-yesplis">
-                            <span class="span">Already have yesplis account ? </span>
+                            <span class="span">Already have extroverse account ? </span>
                             <a href="../login/" class="text-wrapper-2">Login</a>
                         </p>
                         <div class="email">
