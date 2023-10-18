@@ -88,54 +88,107 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <title>Ticketin Dong</title>
 </head>
 
 <body class="bg-gray-100">
     <div class="container mx-auto p-8">
-        <h2 class="text-3xl font-semibold mb-4">Buat Acara Baru</h2>
-        <form method="POST" action="" enctype="multipart/form-data">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="cover_foto">Cover Foto Event</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cover_foto" type="file" name="cover_foto" accept="image/*" required>
+        <div class="flex items-center justify-between mb-8">
+            <!-- Bagian Logo dan Nama Aplikasi -->
+            <div class="flex items-center space-x-4">
+                <img src="logo.png" alt="Logo Aplikasi" class="h-8 w-8">
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_acara">Nama Acara</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama_acara" type="text" name="nama_acara" required>
+
+            <!-- Bagian Pencarian -->
+            <div class="w-60">
+                <div class="relative">
+                    <input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event...">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="bi bi-search"></i>
+                    </div>
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">Deskripsi</label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="deskripsi" name="deskripsi" required></textarea>
+
+            <!-- Bagian Profil Pengguna -->
+            <div class="flex items-center space-x-4 relative">
+                <button id="profileButton" class="relative bg-transparent border border-transparent rounded-full cursor-pointer focus:outline-none">
+                    <i class="bi bi-person-circle text-3xl"></i>
+                </button>
+                <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10">
+                    <ul class="py-2 px-4">
+                        <li><a href="../../profil/">Akun</a></li>
+                        <li><a href="../">Buat Events</a></li>
+                        <li><a href="#">Riwayat Pembelian</a></li>
+                        <li><a href="../auth/logout.php">Logout</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="tanggal">Tanggal</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tanggal" type="date" name="tanggal" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">Harga</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="harga" type="number" name="harga" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="tiket_type">Tiket Type</label>
-                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tiket_type" name="tiket_type" required>
-                    <option value="Presale 1">Presale 1</option>
-                    <option value="Presale 2">Presale 2</option>
-                    <option value="Presale 3">Presale 3</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="jumlah_tiket">Jumlah Tiket</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_tiket" type="number" name="jumlah_tiket" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="lokasi">Lokasi</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lokasi" type="text" name="lokasi" required>
-            </div>
-            <div class="mb-4">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">Buat Acara</button>
-            </div>
-        </form>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-3xl text-center font-semibold mb-4">Buat Acara Baru</h3>
+            <form method="POST" action="" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cover_foto">Cover Foto Event</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cover_foto" type="file" name="cover_foto" accept="image/*" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_acara">Nama Acara</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama_acara" type="text" name="nama_acara" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">Deskripsi</label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="deskripsi" name="deskripsi" style="resize: none;" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="tanggal">Tanggal</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tanggal" type="date" name="tanggal" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">Harga</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="harga" type="number" name="harga" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="tiket_type">Tiket Type</label>
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tiket_type" name="tiket_type" required>
+                        <option value="Presale 1">Presale 1</option>
+                        <option value="Presale 2">Presale 2</option>
+                        <option value="Presale 3">Presale 3</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="jumlah_tiket">Jumlah Tiket</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_tiket" type="number" name="jumlah_tiket" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="lokasi">Lokasi</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lokasi" type="text" name="lokasi" required>
+                </div>
+                <div class="mb-4">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">Buat Acara</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        const profileButton = document.getElementById("profileButton");
+        const profilePopup = document.getElementById("profilePopup");
+
+        profileButton.addEventListener("click", () => {
+            profilePopup.classList.toggle("hidden");
+        });
+
+        // Sembunyikan pop-up saat mengklik di luar pop-up
+        window.addEventListener("click", (e) => {
+            if (!profileButton.contains(e.target) && !profilePopup.contains(e.target)) {
+                profilePopup.classList.add("hidden");
+            }
+        });
+    </script>
 </body>
 
 </html>

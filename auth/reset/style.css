@@ -9,7 +9,7 @@
 .login-HP .overlap {
   position: relative;
   width: 379px;
-  height: 420px;
+  height: 355px;
   background-color: #ffffff;
   border-radius: 7px;
   border: 1px solid;
@@ -63,14 +63,6 @@
   left: 34px;
 }
 
-.login-HP .username {
-  position: absolute;
-  width: 311px;
-  height: 61px;
-  top: 184px;
-  left: 34px;
-}
-
 .login-HP .text-wrapper-3 {
   height: 15px;
   top: 0;
@@ -98,7 +90,7 @@
   position: absolute;
   width: 311px;
   height: 61px;
-  top: 259px;
+  top: 184px;
   left: 34px;
 }
 
@@ -106,7 +98,7 @@
   position: absolute;
   width: 311px;
   height: 41px;
-  top: 350px;
+  top: 279px;
   left: 34px;
 }
 
