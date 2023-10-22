@@ -94,15 +94,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="bg-gray-100">
-    <div class="container mx-auto p-8">
-        <div class="flex items-center justify-between mb-8">
+    <div class="container mx-auto p-3">
+        <div class="flex items-center justify-between">
             <!-- Bagian Logo dan Nama Aplikasi -->
             <div class="flex items-center space-x-4">
-                <img src="logo.png" alt="Logo Aplikasi" class="h-8 w-8">
+                <img src="../../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
             </div>
 
             <!-- Bagian Pencarian -->
-            <div class="w-60">
+            <div class="w-full m-4">
                 <div class="relative">
                     <input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event...">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -118,8 +118,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </button>
                 <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10">
                     <ul class="py-2 px-4">
-                        <li><a href="../../profil/">Akun</a></li>
-                        <li><a href="../">Buat Events</a></li>
+                        <li><a href="../profil/">Akun</a></li>
+                        <li><a href="../event/">Buat Events</a></li>
                         <li><a href="#">Riwayat Pembelian</a></li>
                         <li><a href="../auth/logout.php">Logout</a></li>
                     </ul>
@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-white rounded-lg shadow p-6 mt-4">
             <h3 class="text-3xl text-center font-semibold mb-4">Buat Acara Baru</h3>
             <form method="POST" action="" enctype="multipart/form-data">
                 <div class="mb-4">

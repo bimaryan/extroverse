@@ -23,15 +23,15 @@ $username = $_SESSION["username"];
 </head>
 
 <body class="bg-gray-100">
-    <div class="container mx-auto p-8">
-        <div class="flex items-center justify-between mb-8">
+    <div class="container mx-auto p-3">
+        <div class="flex items-center justify-between">
             <!-- Bagian Logo dan Nama Aplikasi -->
             <div class="flex items-center space-x-4">
-                <img src="logo.png" alt="Logo Aplikasi" class="h-8 w-8">
+                <img src="../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
             </div>
 
             <!-- Bagian Pencarian -->
-            <div class="w-60">
+            <div class="w-full m-4">
                 <div class="relative">
                     <input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event...">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -59,20 +59,25 @@ $username = $_SESSION["username"];
         <?php if ($role === 'pengguna') :
             require_once "../db.php";
         ?>
-            <div class="my-8">
-                <div class="mb-4">
+            <div class="">
+                <div class="mb-4 mt-4">
                     <div class="flex overflow-x-auto swiper-wrapper">
                         <?php
-                        $query_terbaru = "SELECT * FROM events ORDER BY tanggal DESC LIMIT 5";
+                        $query_terbaru = "SELECT * FROM events ORDER BY tanggal DESC LIMIT 10";
                         $result_terbaru = mysqli_query($koneksi, $query_terbaru);
                         while ($row_terbaru = mysqli_fetch_assoc($result_terbaru)) :
                         ?>
-                            <div class="w-full mr-2 swiper-slide">
+                            <div class="swiper-slide mr-4" style='width: 459px; height: auto;'>
                                 <a href="../event/event_detail/?event_id=<?php echo $row_terbaru['event_id']; ?>">
-                                    <div class="relative">
-                                        <div class="w-full overflow-hidden mb-5">
-                                            <img src="../event/buat_acara/<?php echo $row_terbaru['cover_foto']; ?>" alt="Cover Event" class="w-full h-full object-cover">
+                                    <div class="relative overflow-hidden">
+                                        <div style="width: 1226px; height: 239px; justify-content: flex-end; align-items: center; display: inline-flex">
+                                            <div style="width: 1956px; align-self: stretch; position: relative">
+                                                <img src="../event/buat_acara/<?php echo $row_terbaru['cover_foto']; ?>" style="width: 459px; height: 239px; left: 0px; top: 0px; position: absolute object-cover" />
+                                            </div>
                                         </div>
+                                        <!-- <div class="w-full overflow-hidden mb-5">
+                                            <img src="../event/buat_acara/<?php echo $row_terbaru['cover_foto']; ?>" alt="Cover Event" class="object-cover">
+                                        </div> -->
                                     </div>
                                 </a>
                             </div>

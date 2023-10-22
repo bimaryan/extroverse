@@ -30,21 +30,19 @@ if (isset($_GET['event_id'])) {
             </head>
 
             <body class="bg-gray-100">
-                <div class="container mx-auto p-8">
-                    <div class="flex items-center justify-between mb-8">
+                <div class="container mx-auto p-3">
+                    <div class="flex items-center justify-between">
                         <!-- Bagian Logo dan Nama Aplikasi -->
                         <div class="flex items-center space-x-4">
-                            <img src="logo.png" alt="Logo Aplikasi" class="h-8 w-8">
+                            <img src="../../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
                         </div>
 
                         <!-- Bagian Pencarian -->
-                        <div class="w-60">
+                        <div class="w-full m-4">
                             <div class="relative">
                                 <input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event...">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M14.293 13.293a6 6 0 111.414-1.414l5 5a1 1 0 01-1.414 1.414l-5-5zM6 10a4 4 0 100-8 4 4 0 000 8z" clip-rule="evenodd" />
-                                    </svg>
+                                    <i class="bi bi-search"></i>
                                 </div>
                             </div>
                         </div>
@@ -54,18 +52,18 @@ if (isset($_GET['event_id'])) {
                             <button id="profileButton" class="relative bg-transparent border border-transparent rounded-full cursor-pointer focus:outline-none">
                                 <i class="bi bi-person-circle text-3xl"></i>
                             </button>
-                            <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md">
+                            <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10">
                                 <ul class="py-2 px-4">
-                                    <li><a href="../../profil/">Akun</a></li>
-                                    <li><a href="../">Buat Events</a></li>
+                                    <li><a href="../profil/">Akun</a></li>
+                                    <li><a href="../event/">Buat Events</a></li>
                                     <li><a href="#">Riwayat Pembelian</a></li>
-                                    <li><a href="../../auth/logout.php">Logout</a></li>
+                                    <li><a href="../auth/logout.php">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="w-full bg-white border rounded-lg p-4">
+                    <div class="w-full bg-white border rounded-lg p-4 mt-4">
                         <div class="w-full h-64 overflow-hidden mb-5">
                             <img src="../buat_acara/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="w-full h-full object-cover rounded-lg">
                         </div>
