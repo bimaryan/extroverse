@@ -88,21 +88,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <title>Ticketin Dong</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <title>Extroverse</title>
 </head>
 
 <body class="bg-gray-100">
     <div class="container mx-auto p-3">
         <div class="flex items-center justify-between">
             <!-- Bagian Logo dan Nama Aplikasi -->
-            <div class="flex items-center space-x-4">
+            <a href="/" class="flex items-center space-x-4">
                 <img src="../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
-            </div>
+            </a>
 
             <!-- Bagian Pencarian -->
             <div class="w-full m-4">
                 <div class="relative">
-                    <input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event...">
+                    <a href="../search"><input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event..."></a>
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i class="bi bi-search"></i>
                     </div>
@@ -170,6 +171,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">Submit</button>
                 </div> -->
             </form>
+            <div class="mb-4">
+                <a href="../event/daftar_acara/" class="bg-purple-500 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">List Daftar Acara</a>
+            </div>
         </div>
     </div>
 

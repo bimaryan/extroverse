@@ -1,46 +1,67 @@
 <?php
 session_start();
 
+// Include PHPMailer autoloader
+require 'C:\xampp\htdocs\extroverse\vendor\phpmailer\phpmailer\src\Exception.php';
+require 'C:\xampp\htdocs\extroverse\vendor\phpmailer\phpmailer\src\PHPMailer.php';
+require 'C:\xampp\htdocs\extroverse\vendor\phpmailer\phpmailer\src\SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
-    $password = $_POST["password"];
 
-    // Validasi data
-    if (empty($email) || empty($password)) {
-        echo "Isi semua field.";
-    } else {
-        // Koneksi ke database (gunakan file koneksi Anda)
-        require_once "../../db.php";
+    // Validate email (you can add more validation)
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        require_once 'C:\xampp\htdocs\extroverse\db.php'; // Adjust the path based on your file structure
 
-        // Sanitasi data
-        $email = mysqli_real_escape_string($koneksi, $email);
+        // Check if the email exists in your user database
+        $checkEmailSql = "SELECT * FROM users WHERE email='$email'";
+        $result = mysqli_query($koneksi, $checkEmailSql);
 
-        $sql = "SELECT * FROM users WHERE email = '$email'";
-        $result = mysqli_query($koneksi, $sql);
+        if (mysqli_num_rows($result) == 1) {
+            // Email exists, generate a unique token
+            $token = bin2hex(random_bytes(32));
 
-        if ($result) {
-            if (mysqli_num_rows($result) == 1) {
-                $row = mysqli_fetch_assoc($result);
-                if (password_verify($password, $row['password'])) {
-                    // Login berhasil
-                    $_SESSION["user_id"] = $row["user_id"];
-                    $_SESSION["username"] = $row["username"];
-                    $_SESSION["role"] = $row["role"];
-                    $_SESSION['email'] = $email;
+            // Store the token in the password_resets table
+            $storeTokenSql = "INSERT INTO password_resets (email, token) VALUES ('$email', '$token')";
+            if (mysqli_query($koneksi, $storeTokenSql)) {
+                // Send an email with the reset link
+                $mail = new PHPMailer(true);
 
-                    header("Location: ../../dashboard/");
-                    exit();
-                } else {
-                    echo "Kata sandi salah.";
+                try {
+                    // Server settings
+                    $mail->isSMTP();
+                    $mail->Host       = 'gmail.com';  // Specify your SMTP server
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = 'bimagaminh@gmail.com';  // SMTP username
+                    $mail->Password   = '@Nabati2301';  // SMTP password
+                    $mail->SMTPSecure = 'tls';
+                    $mail->Port       = 587;
+
+                    // Recipients
+                    $mail->setFrom('bimagaminh@gmail.com', 'Bima Ryan Alfarizi');
+                    $mail->addAddress($email);
+
+                    // Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Password Reset';
+                    $mail->Body    = "Click the following link to reset your password: <a href='http://localhost/auth/reset/confirm/?email=$email&token=$token'>Reset Password</a>";
+
+                    $mail->send();
+                    echo 'Password reset link sent to your email.';
+                } catch (Exception $e) {
+                    echo "Error sending email: {$mail->ErrorInfo}";
                 }
             } else {
-                echo "Email tidak ditemukan.";
+                echo "Error storing reset token: " . mysqli_error($koneksi);
             }
         } else {
-            echo "Terjadi kesalahan dalam pengolahan permintaan.";
+            echo "Email not found.";
         }
-
-        mysqli_close($koneksi);
+    } else {
+        echo "Invalid email format.";
     }
 }
 ?>
@@ -51,49 +72,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="styles.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Reset Password</title>
+    <title>Password Reset</title>
 </head>
 
 <body>
-    <div class="navbar">
-        <div class="overlap-2">
-            <div class="div-wrapper">
-                <div class="text-wrapper-4">Extro</div>
-            </div>
-            <div class="text-wrapper-5">verse</div>
-        </div>
-    </div>
-    <div class="login-HP">
-        <div class="div">
-            <div class="card">
-                <form method="POST">
-                    <div class="overlap">
-                        <div class="text-wrapper">Reset Password</div>
-                        <p class="don-t-have-yesplis">
-                            <span class="span">Don’t have extroverse account ? </span>
-                            <a href="../register/" class="text-wrapper-2">Sign Up</a>
-                        </p>
-                        <div class="email">
-                            <label for="email" class="text-wrapper-3">Email Address:</label>
-                            <input class="img form-control" type="email" id="email" name="email" required />
-                        </div>
-                        <div class="password">
-                            <label for="password" class="text-wrapper-3">Password:</label>
-                            <input class="img form-control" type="password" id="password" name="password" required />
-                        </div>
-                        <div class="submit">
-                            <button class="overlap-group" type="submit">
-                                <div class="submit-2">Login</div>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <form method="POST" action="">
+        <label for="email">Enter your email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Reset Password</button>
+    </form>
 </body>
 
 </html>

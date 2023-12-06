@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Include the database connection
-require_once "../db.php";
+require "../../db.php";
 
 // Check if the user is logged in and has the admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -13,27 +13,25 @@ function getAdminData($koneksi)
 {
     $data = array();
 
-    // Get counts
-    $data['eventCount'] = getCount($koneksi, 'events');
-    $data['ticketCount'] = getCount($koneksi, 'tickets');
-    $data['userCount'] = getCount($koneksi, 'users');
+    // Get user details
+    $data['users'] = getUsers($koneksi);
 
     return $data;
 }
 
-// Function to get counts from the database
-function getCount($koneksi, $events)
+function getUsers($koneksi)
 {
-    $sql = "SELECT COUNT(*) as count FROM $events";
-    $result = mysqli_query($koneksi, $sql);
-    $row = mysqli_fetch_assoc($result);
-    return $row['count'];
-}
+    $users = array();
 
-// Get counts
-$eventCount = getCount($koneksi, 'events');
-$ticketCount = getCount($koneksi, 'tickets');
-$userCount = getCount($koneksi, 'users');
+    $sql = "SELECT user_id, username, email FROM users";
+    $result = mysqli_query($koneksi, $sql);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $users[] = $row;
+    }
+
+    return $users;
+}
 
 // Admin-only content here
 $data = getAdminData($koneksi);
@@ -75,7 +73,7 @@ $data = getAdminData($koneksi);
             <hr />
             <ul class="space-y-2 font-medium mt-2">
                 <li>
-                    <a href="./" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="http://localhost/extroverse/admin" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i class="bi bi-house-door"></i>
                         <span class="ms-3">Dashboard</span>
                     </a>
@@ -97,7 +95,7 @@ $data = getAdminData($koneksi);
                     </a>
                 </li> -->
                 <li>
-                    <a href="./users/" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <a href="./" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="bi bi-people"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
                     </a>
@@ -106,12 +104,6 @@ $data = getAdminData($koneksi);
                     <a href="#" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="bi bi-calendar2-event"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Event</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="bi bi-money"></i>
-                        <span class="flex-1 ms-3 whitespace-nowrap">History Transaksi</span>
                     </a>
                 </li>
                 <!-- <li>
@@ -156,21 +148,15 @@ $data = getAdminData($koneksi);
                 </div>
             </div>
         </nav>
-        <div class="mt-2" id="dashboard">
-            <h1 class="text-2xl font-semibold mb-2">Dashboard</h1>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="p-4 text-center items-center justify-center rounded bg-blue-500 dark:bg-gray-800 gap-2">
-                    <p class="text-3xl text-white"><?php echo $eventCount; ?></p>
-                    <p class="text-white">Events</p>
-                </div>
-                <div class="p-4 text-center items-center justify-center rounded bg-blue-500 dark:bg-gray-800">
-                    <p class="text-3xl text-white"><?php echo $ticketCount; ?></p>
-                    <p class="text-white">Tickets</p>
-                </div>
-                <div class="p-4 text-center items-center justify-center rounded bg-blue-500 dark:bg-gray-800">
-                    <p class="text-3xl text-white"><?php echo $userCount; ?></p>
-                    <p class="text-white">Users</p>
-                </div>
+        <div class="mt-2">
+            <h2 class="text-2xl font-semibold mb-2">Users</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <?php foreach ($data['users'] as $user) : ?>
+                    <div class="p-3 bg-gray-800 text-white rounded-md">
+                        <h3 class="text-lg font-semibold mb-2"><?php echo $user['username']; ?></h3>
+                        <p class="text-gray-400"><?php echo $user['email']; ?></p>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
         <!-- <div class="mt-2" id="inbox">
