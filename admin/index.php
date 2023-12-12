@@ -110,7 +110,7 @@ $data = getAdminData($koneksi);
                 </li>
                 <li>
                     <a href="#" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="bi bi-money"></i>
+                        <i class="bi bi-clock-history"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">History Transaksi</span>
                     </a>
                 </li>

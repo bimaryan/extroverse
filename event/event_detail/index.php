@@ -24,10 +24,11 @@ if (isset($_GET['event_id'])) {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
                 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
                 <title>Extroverse</title>
                 <style>
                     #shareButton {
@@ -104,7 +105,7 @@ if (isset($_GET['event_id'])) {
                             <div>
                                 <form action="../pembayaran/" method="post">
                                     <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
-                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit" onclick="buyTicket()">Beli Tiket</button>
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit" onclick="buyTicket()">Checkout</button>
                                 </form>
                             </div>
 

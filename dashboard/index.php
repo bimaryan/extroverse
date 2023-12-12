@@ -60,7 +60,7 @@ $email = $_SESSION['email'];
                     </div>
                     <ul class="py-2" aria-labelledby="user-menu-button">
                         <li>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Account</a>
+                            <a href="http://localhost/extroverse/profil" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Account</a>
                         </li>
                         <li>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
@@ -166,35 +166,6 @@ $email = $_SESSION['email'];
     </nav> -->
     <div class="container mx-auto p-3">
 
-        <!-- <div class="flex items-center justify-between">
-        <a href="/" class="flex items-center space-x-4">
-            <img src="../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
-        </a>
-
-        <div class="w-full m-4">
-            <div class="relative">
-                <a href="../search"><input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event..."></a>
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <i class="bi bi-search"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex items-center space-x-4 relative">
-            <button id="profileButton" class="relative bg-transparent border border-transparent rounded-full cursor-pointer focus:outline-none">
-                <i class="bi bi-person-circle text-3xl"></i>
-            </button>
-            <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10">
-                <ul class="py-2 px-4">
-                    <li><a href="../profil/">Akun</a></li>
-                    <li><a href="../event/buat_acara/">Buat Events</a></li>
-                    <li><a href="#">Riwayat Pembelian</a></li>
-                    <li><a href="../auth/logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </div> -->
-
         <?php if ($role === 'pengguna') :
             require_once "../db.php";
         ?>
@@ -252,7 +223,7 @@ $email = $_SESSION['email'];
                                 <a href="../event/event_detail/?event_id=<?php echo $row_top['event_id']; ?>">
                                     <div class="relative">
                                         <div class="w-full h-64 overflow-hidden mb-5">
-                                            <img src="../event/buat_acara/<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full object-cover rounded-lg">
+                                            <img src="../event/buat_acara/<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full object-cover rounded-lg" style="border: 1px solid #111111;">
                                         </div>
                                         <p class="mb-2 absolute top-2 right-2 bg-white p-2 rounded font-semibold text-lg"><?php echo $row_top['tanggal']; ?></p>
                                     </div>

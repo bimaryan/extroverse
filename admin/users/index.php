@@ -59,11 +59,60 @@ $data = getAdminData($koneksi);
         .hvr:hover {
             color: black
         }
+
+        .modal {
+            display: none;
+            z-index: 1;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
     </style>
 
 </head>
 
 <body>
+    <?php
+    // Check if the form is submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST["username"];
+        $email = $_POST["email"]; // Add email field
+        $password = $_POST["password"];
+
+        // Validasi data
+        if (empty($username) || empty($email) || empty($password)) {
+            echo "<script>Swal.fire('Error', 'Isi semua field.', 'error');</script>";
+        } elseif (strlen($username) < 5) {
+            echo "<script>Swal.fire('Error', 'Username minimal 5 karakter.', 'error');</script>";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "<script>Swal.fire('Error', 'Email tidak valid.', 'error');</script>";
+        } elseif (strlen($password) < 8) {
+            echo "<script>Swal.fire('Error', 'Password minimal 8 karakter.', 'error');</script>";
+        } else {
+            // Koneksi ke database (gunakan file koneksi Anda)
+            require_once "../../db.php";
+
+            // Sanitasi data
+            $username = mysqli_real_escape_string($koneksi, $username);
+            $email = mysqli_real_escape_string($koneksi, $email);
+
+            // Hash password sebelum menyimpannya di database
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$hashed_password', 'pengguna')";
+
+            if (mysqli_query($koneksi, $sql)) {
+                $_SESSION["email"] = $email;
+                echo "<script>Swal.fire('Success', 'Registration successful.', 'success');</script>";
+            } else {
+                echo "<script>Swal.fire('Error', 'Terjadi kesalahan dalam registrasi: " . mysqli_error($koneksi) . "', 'error');</script>";
+            }
+
+            mysqli_close($koneksi);
+        }
+    }
+    ?>
+
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar" style="background-color: #240e4d;">
         <div class="h-full px-3 py-4 overflow-y-auto">
             <a href="http://localhost/extroverse/admin" class="flex items-center ps-2.5 mb-5">
@@ -106,6 +155,12 @@ $data = getAdminData($koneksi);
                         <span class="flex-1 ms-3 whitespace-nowrap">Event</span>
                     </a>
                 </li>
+                <li>
+                    <a href="#" class="hvr flex items-center p-2 text-white rounded-lg dark:text-dark hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="bi bi-clock-history"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">History Transaksi</span>
+                    </a>
+                </li>
                 <!-- <li>
                     <a href="http://localhost/extroverse/auth/login" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i class="bi bi-box-arrow-left"></i>
@@ -129,7 +184,7 @@ $data = getAdminData($koneksi);
                     <!-- <img src="http://localhost/extroverse/img/extroverse.png" class="h-8" alt="Flowbite Logo" /> -->
                     <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Admin <?php echo $_SESSION['username']; ?></span>
                 </a>
-                <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                <button id="sidebarToggle" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                     <span class="sr-only">Open sidebar</span>
                     <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
@@ -150,15 +205,43 @@ $data = getAdminData($koneksi);
         </nav>
         <div class="mt-2">
             <h2 class="text-2xl font-semibold mb-2">Users</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+            <!-- Add a button to open the modal -->
+            <button onclick="openModal()" class="p-2 bg-blue-500 rounded-md text-white">Add User</button>
+
+            <!-- Modal HTML -->
+            <div id="addUserModal" class="modal p-3 rounded-md mt-2" style="background-color: #240e4d">
+                <span class="text-red-500 text-2xl" onclick="closeModal()" style="float: right; margin-top: -10px; margin-right: 0;"><i class="bi bi-x-circle"></i></span>
+                <div class="modal-content card">
+                    <!-- Add User Form -->
+                    <form action="" method="POST" class="mt-2">
+                        <div class="mb-4">
+                            <label for="username" class="block text-sm text-white font-medium">Username:</label>
+                            <input type="text" name="username" class="mt-1 p-2 border rounded-md w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm text-white font-medium">Email:</label>
+                            <input type="email" name="email" class="mt-1 p-2 border rounded-md w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="block text-sm text-white font-medium">Password:</label>
+                            <input type="password" name="password" class="mt-1 p-2 border rounded-md w-full" required>
+                        </div>
+                        <button type="submit" class="bg-green-500 text-white p-2 rounded-md">Add User</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
                 <?php foreach ($data['users'] as $user) : ?>
                     <div class="p-3 bg-gray-800 text-white rounded-md">
-                        <h3 class="text-lg font-semibold mb-2"><?php echo $user['username']; ?></h3>
-                        <p class="text-gray-400"><?php echo $user['email']; ?></p>
+                        <h3 class="text-lg font-semibold mb-2 overflow-hidden whitespace-nowrap overflow-ellipsis"><?php echo $user['username']; ?></h3>
+                        <p class="text-gray-400 overflow-hidden whitespace-nowrap overflow-ellipsis"><?php echo $user['email']; ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
+
         <!-- <div class="mt-2" id="inbox">
             <h1 class="text-2xl font-semibold mb-2">Inbox</h1>
             <div class="grid grid-cols-3 gap-4">
@@ -184,6 +267,32 @@ $data = getAdminData($koneksi);
 
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
 
+    <script>
+        // Add JavaScript to toggle the sidebar on small screens
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('logo-sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
+
+    <script>
+        // JavaScript functions to handle modal
+        function openModal() {
+            document.getElementById('addUserModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addUserModal').style.display = 'none';
+        }
+
+        // Close modal if the user clicks outside the modal
+        window.onclick = function(event) {
+            var modal = document.getElementById('addUserModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 
 </html>
