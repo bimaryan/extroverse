@@ -32,39 +32,10 @@ if (!$result) {
 </head>
 
 <body class="bg-gray-100">
+    <?php
+    include "../../components/navbar.php";
+    ?>
     <div class="container mx-auto p-3">
-        <div class="flex items-center justify-between">
-            <!-- Bagian Logo dan Nama Aplikasi -->
-            <a href="/" class="flex items-center space-x-4">
-                <img src="../../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
-            </a>
-
-            <!-- Bagian Pencarian -->
-            <div class="w-full m-4">
-                <div class="relative">
-                    <a href="../../search"><input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event..."></a>
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i class="bi bi-search"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bagian Profil Pengguna -->
-            <div class="flex items-center space-x-4 relative">
-                <button id="profileButton" class="relative bg-transparent border border-transparent rounded-full cursor-pointer focus:outline-none">
-                    <i class="bi bi-person-circle text-3xl"></i>
-                </button>
-                <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10">
-                    <ul class="py-2 px-4">
-                        <li><a href="../../profil/">Akun</a></li>
-                        <li><a href="../">Buat Events</a></li>
-                        <li><a href="#">Riwayat Pembelian</a></li>
-                        <li><a href="../auth/logout.php">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
         <div class="bg-white rounded-lg shadow p-6 mt-4">
             <h3 class="text-2xl font-semibold mb-4 text-center">Daftar Acara</h3>
             <div class="min-w-full overflow-x-auto">
@@ -102,7 +73,7 @@ if (!$result) {
                     </tbody>
                 </table>
             </div>
-            <br/>
+            <br />
             <p><a href="../buat_acara/" class="bg-purple-500 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-full">Buat Acara Baru</a></p>
         </div>
     </div>

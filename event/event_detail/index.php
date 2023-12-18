@@ -1,6 +1,12 @@
 <?php
 // Pastikan Anda sudah membuat koneksi ke database
 require_once "../../db.php";
+session_start();
+
+if (!isset($_SESSION["user_id"])) {
+    header("Location: ../../login/index.php");
+    exit();
+}
 
 // Periksa apakah event_id tersedia dalam parameter URL
 if (isset($_GET['event_id'])) {
@@ -27,6 +33,7 @@ if (isset($_GET['event_id'])) {
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
                 <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
                 <title>Extroverse</title>
@@ -39,38 +46,10 @@ if (isset($_GET['event_id'])) {
             </head>
 
             <body class="bg-gray-100">
+                <?php
+                include "../../components/navbar.php";
+                ?>
                 <div class="container mx-auto p-3">
-                    <div class="flex items-center justify-between">
-                        <!-- Bagian Logo dan Nama Aplikasi -->
-                        <a href="/" class="flex items-center space-x-4">
-                            <img src="../../img/extroverse.png" alt="Logo Aplikasi" class="h-8 w-8" style="width: 123px; height: 100%;">
-                        </a>
-
-                        <!-- Bagian Pencarian -->
-                        <div class="w-full m-4">
-                            <div class="relative">
-                                <a href="../../search"><input type="text" class="w-full border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Cari event..."></a>
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <i class="bi bi-search"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bagian Profil Pengguna -->
-                        <div class="flex items-center space-x-4 relative">
-                            <button id="profileButton" class="relative bg-transparent border border-transparent rounded-full cursor-pointer focus:outline-none">
-                                <i class="bi bi-person-circle text-3xl"></i>
-                            </button>
-                            <div id="profilePopup" class="hidden absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10">
-                                <ul class="py-2 px-4">
-                                    <li><a href="../../profil/">Akun</a></li>
-                                    <li><a href="../">Buat Events</a></li>
-                                    <li><a href="#">Riwayat Pembelian</a></li>
-                                    <li><a href="../auth/logout.php">Logout</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="w-full bg-white border rounded-lg p-4 mt-4">
                         <div class="w-full h-64 overflow-hidden mb-5">
@@ -103,7 +82,7 @@ if (isset($_GET['event_id'])) {
 
                             <!-- Tombol Beli Tiket (di tengah) -->
                             <div>
-                                <form action="../pembayaran/" method="post">
+                                <form action="http://localhost/extroverse/event/checkout/" method="post">
                                     <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
                                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit" onclick="buyTicket()">Checkout</button>
                                 </form>
