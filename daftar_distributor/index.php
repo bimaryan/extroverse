@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Extroverse</title>
+    <title>Extroverse - Distributor Registration</title>
     <style>
         body {
             font-family: Unbounded;
@@ -39,55 +40,46 @@
 </head>
 
 <body class="bg-gray-200 bg-cover bg-center" style="background-color: #240e4d;">
+    <!-- Your existing HTML content here -->
     <?php
     session_start();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST["username"];
         $email = $_POST["email"];
         $password = $_POST["password"];
+        $phone = $_POST["phone"];
+        $gender = $_POST["gender"];
+
+        // Additional code for handling profile image upload
+        $profileImageName = $_FILES['profile_image']['name'];
+        $profileImageTmpName = $_FILES['profile_image']['tmp_name'];
+        $profileImageSize = $_FILES['profile_image']['size'];
 
         // Validasi data
-        if (empty($email) || empty($password)) {
+        if (empty($username) || empty($email) || empty($password) || empty($phone) || empty($gender) || empty($profileImageName)) {
             echo "<script>Swal.fire('Error', 'Isi semua field.', 'error');</script>";
         } else {
             // Koneksi ke database (gunakan file koneksi Anda)
-            require_once "../../db.php";
+            require_once "../db.php";
 
             // Sanitasi data
+            $username = mysqli_real_escape_string($koneksi, $username);
             $email = mysqli_real_escape_string($koneksi, $email);
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-            $sql = "SELECT * FROM users WHERE email = '$email'";
-            $result = mysqli_query($koneksi, $sql);
+            // Move uploaded profile image to a folder (adjust the folder path as needed)
+            $uploadPath = "../profil/logo/";
+            $profileImagePath = $uploadPath . $profileImageName;
+            move_uploaded_file($profileImageTmpName, $profileImagePath);
 
-            if ($result) {
-                if (mysqli_num_rows($result) == 1) {
-                    $row = mysqli_fetch_assoc($result);
-                    if (password_verify($password, $row['password'])) {
-                        // Login berhasil
-                        $_SESSION["user_id"] = $row["user_id"];
-                        $_SESSION["username"] = $row["username"];
-                        $_SESSION["role"] = $row["role"];
-                        $_SESSION['email'] = $email;
+            // Insert data into the users table
+            $sql = "INSERT INTO users (username, email, password, role, phone, gender, profile_image) VALUES ('$username', '$email', '$passwordHash', 'penjual', '$phone', '$gender', '$profileImagePath')";
 
-                        // Redirect based on user role
-                    if ($_SESSION["role"] === 'admin') {
-                        header("Location: ../../admin/");
-                        exit();
-                    } else if ($_SESSION["role"] === 'penjual') {
-                        header("Location: ../../penjual/"); // Change this to the actual path for the seller's dashboard
-                        exit();
-                    } else {
-                        header("Location: ../../home/");
-                        exit();
-                    }
-                    } else {
-                        echo "<script>Swal.fire('Error', 'Kata sandi salah.', 'error');</script>";
-                    }
-                } else {
-                    echo "<script>Swal.fire('Error', 'Email tidak ditemukan.', 'error');</script>";
-                }
+            if (mysqli_query($koneksi, $sql)) {
+                echo "<script>Swal.fire('Success', 'Registration successful.', 'success').then(() => { window.location.href = '../auth/login/'; });</script>";
             } else {
-                echo "<script>Swal.fire('Error', 'Terjadi kesalahan dalam pengolahan permintaan.', 'error');</script>";
+                echo "<script>Swal.fire('Error', 'Terjadi kesalahan dalam pendaftaran.', 'error');</script>";
             }
 
             mysqli_close($koneksi);
@@ -96,37 +88,47 @@
     ?>
 
     <div id="particles-js" class="absolute top-0 left-0 w-full h-full"></div>
-    <div class="container mx-auto p-5 mt-16 relative z-10" style="background-color: rgba(0, 0, 0, 0.5); width: 350px; border-radius: 15px; box-shadow: 8px 8px 5px 0px rgba(0, 0, 0, 0.25);">
+    <div class="container mx-auto p-5 mt-10 relative z-10" style="background-color: rgba(0, 0, 0, 0.5); width: 350px; border-radius: 15px; box-shadow: 8px 8px 5px 0px rgba(0, 0, 0, 0.25);">
         <div class="text-center">
             <img src="http://localhost/extroverse/img/extroverse.png" style="width: 110px;" alt="Avatar" class="mx-auto">
             <hr>
-            <h2 class="text-lg text-white font-semibold">L O G I N</h2>
+            <h2 class="text-lg text-white font-semibold">Distributor Registration</h2>
         </div>
-        <form class="max-w-sm mx-auto mt-2" method="POST">
-            <label class="text-white" id="email" for="email" class="mb-1">Email</label>
-            <input type="email" id="email" name="email" autocomplete="off" placeholder="Masukkan Email..." name="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
+        <form class="max-w-sm mx-auto mt-2" method="POST" enctype="multipart/form-data" action="">
+            <!-- Add your registration form fields here -->
+            <label class="text-white" for="username" class="mb-1">Username</label>
+            <input type="text" id="username" name="username" autocomplete="off" placeholder="Enter Username..." class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
 
-            <label class="text-white" id="password" for="password" class="mb-1 mt-3">Password</label>
-            <input type="password" id="password" autocomplete="off" placeholder="Masukkan Password..." name="password" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
+            <label class="text-white" for="email" class="mb-1 mt-3">Email</label>
+            <input type="email" id="email" name="email" autocomplete="off" placeholder="Enter Email..." class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
 
-            <div class="flex items-center justify-between mt-3">
-                <label class="flex items-center space-x-2 text-white">
-                    <input type="checkbox" checked="checked" name="remember" class="form-checkbox text-blue-500 focus:outline-none focus:border-blue-500">
-                    <span class="text-sm">Remember me</span>
-                </label>
-                <span class="text-sm"><a href="../reset/" class="text-blue-500">Forgot password?</a></span>
-            </div>
+            <label class="text-white" for="password" class="mb-1 mt-3">Password</label>
+            <input type="password" id="password" autocomplete="off" placeholder="Enter Password..." name="password" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
+
+            <label class="text-white" for="phone" class="mb-1 mt-3">Phone</label>
+            <input type="text" id="phone" name="phone" autocomplete="off" placeholder="Enter Phone..." class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
+
+            <label class="text-white" for="gender" class="mb-1 mt-3">Gender</label>
+            <select id="gender" name="gender" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label class="text-white" for="profile_image" class="mb-1 mt-3">Profile Image</label>
+            <input type="file" id="profile_image" name="profile_image" class="text-white w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
+
+            <!-- Your existing form fields -->
 
             <div class="mt-6">
                 <button type="submit" class="w-full text-white p-3 rounded focus:outline-none focus:shadow-outline-blue" style="background-color: #240e4d;">
-                    Login
+                    Register
                 </button>
             </div>
         </form>
-
-        <div class="text-center text-white mt-5">Don't have an Extroverse account? <a href="../register/" class="text-blue-500">Registration</a></div>
     </div>
 
+    <!-- Your existing script and styling imports -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         particlesJS('particles-js', {

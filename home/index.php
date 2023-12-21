@@ -178,7 +178,7 @@ $email = $_SESSION['email'];
                                     <div class="relative overflow-hidden">
                                         <div style="width: 1226px; height: 239px; justify-content: flex-end; align-items: center; display: inline-flex;">
                                             <div style="width: 1956px; align-self: stretch; position: relative;">
-                                                <img src="../event/buat_acara/<?php echo $row_terbaru['cover_foto']; ?>" style="width: 459px; height: 239px; left: 0px; top: 0px; position: absolute; border: 1px solid #111111;" />
+                                                <img src="../img/<?php echo $row_terbaru['cover_foto']; ?>" style="width: 459px; height: 239px; left: 0px; top: 0px; position: absolute; border: 1px solid #111111;" />
                                             </div>
                                         </div>
                                         <!-- <div class="w-full overflow-hidden mb-5">
@@ -219,7 +219,7 @@ $email = $_SESSION['email'];
                                 <a href="../event/event_detail/?event_id=<?php echo $row_top['event_id']; ?>">
                                     <div class="relative">
                                         <div class="w-full h-64 overflow-hidden mb-5">
-                                            <img src="../event/buat_acara/<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full object-cover rounded-lg" style="border: 1px solid #111111;">
+                                            <img src="../img/<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full rounded-lg" style="border: 1px solid #111111;">
                                         </div>
                                         <p class="mb-2 absolute top-2 right-2 bg-white p-2 rounded font-semibold text-lg"><?php echo $row_top['tanggal']; ?></p>
                                     </div>
@@ -266,9 +266,6 @@ $email = $_SESSION['email'];
                 </div> -->
             </div>
         <?php endif; ?>
-        <?php if ($role === 'admin');
-        require "../db.php";
-        ?>
     </div>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

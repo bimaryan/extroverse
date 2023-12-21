@@ -50,10 +50,13 @@ if (isset($_GET['event_id'])) {
                 include "../../components/navbar.php";
                 ?>
                 <div class="container mx-auto p-3">
+                    <div class="mt-2">
+                        <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
+                    </div>
 
                     <div class="w-full bg-white border rounded-lg p-4 mt-4">
-                        <div class="w-full h-64 overflow-hidden mb-5">
-                            <img src="../buat_acara/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="w-full h-full object-cover rounded-lg">
+                        <div class="w-full h-full overflow-hidden mb-5 mx-auto flex items-center justify-center">
+                            <img src="http://localhost/extroverse/img/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="rounded-lg" style="width: 500px; height: 500px">
                         </div>
                         <div class="flex justify-between items-center">
                             <h2 class="text-3xl font-semibold mb-4"><?php echo $event['nama_acara']; ?></h2>
