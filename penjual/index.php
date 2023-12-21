@@ -166,7 +166,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                         </svg>
                     </button>
                     <a href="./" class="flex ms-2 md:me-24">
-                        <img src="https://6abf-180-241-241-47.ngrok-free.app/extroverse/logo/extroverse.png" class="h-8 me-3" alt="Extroverse" />
+                        <img src="http://localhost/extroverse/logo/extroverse.png" class="h-8 me-3" alt="Extroverse" />
                         <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Extroverse</span>
                     </a>
                 </div>
@@ -255,7 +255,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
 
     <div class="p-4 sm:ml-64">
         <div class="rounded-lg mt-14">
-            <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
+            <div id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambahkan Acara</h2>
                 <form method="POST" action="" enctype="multipart/form-data">
                     <div class="mb-4">
@@ -310,7 +310,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                 COMING SOON
             </div>
 
-            <div id="eventCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
+            <div style="display: none;" id="eventCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">List Daftar Acara</h2>
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -383,7 +383,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                                     echo "<td class='border text-center' style=''>{$event['lokasi']}</td>";
                                     echo "<td class='border text-center' style=''>{$event['jumlah_tiket_terjual']}</td>";
                                     echo "<td class='border text-center' style=''>{$event['tiket_type']}</td>";
-                                    echo "<td class='border text-center' style=''><a data-modal-target='default-modal' data-modal-toggle='default-modal' class='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-2 rounded-full' onclick='openEditModal(<?php echo $event_details('event_id');)'>Edit</a></td>";
+                                    echo "<td class='border text-center' style=''><a data-modal-target='default-modal' data-modal-toggle='default-modal' class='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-2 rounded-full'>Edit</a></td>";
                                     echo "</tr>";
                                 }
                             } else {
@@ -396,37 +396,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
 
                 <!-- Main modal -->
                 <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                    <?php
-                    // Check if the event_id is set and is a valid positive integer
-                    if (isset($_GET['event_id']) && is_numeric($_GET['event_id']) && $_GET['event_id'] > 0) {
-                        $event_id = $_GET['event_id'];
-
-                        // Assuming you have a database connection established
-                        require_once "../db.php";
-
-                        // Fetch event details from the database
-                        $query_event_details = "SELECT * FROM events WHERE event_id = $event_id";
-                        $result_event_details = mysqli_query($koneksi, $query_event_details);
-
-                        // Check for errors in the query
-                        if (!$result_event_details) {
-                            die('Error in query: ' . mysqli_error($koneksi));
-                        }
-
-                        // Check if the event was found
-                        if (mysqli_num_rows($result_event_details) > 0) {
-                            $event_details = mysqli_fetch_assoc($result_event_details);
-                            // Now $event_details contains the details of the event
-                        } else {
-                            echo "Event not found.";
-                        }
-
-                        // Close the database connection
-                        mysqli_close($koneksi);
-                    } else {
-                        echo "Invalid event ID.";
-                    }
-                    ?>
                     <div class="relative p-4 w-full max-w-2xl max-h-full">
                         <!-- Modal content -->
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -452,7 +421,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                                     </div>
                                     <div class="">
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_acara">Nama Acara</label>
-                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama_acara" type="text" name="nama_acara" required value="<?php echo $event_details['nama_acara']; ?>">
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama_acara" type="text" name="nama_acara" required>
                                     </div>
                                     <div class="">
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">Deskripsi</label>
@@ -502,18 +471,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
         </div>
     </div>
     </div>
-
-    <script>
-        function openEditModal(eventId) {
-            // Set the event ID in the hidden input field
-            document.getElementById('event-id').value = eventId;
-
-            // Use JavaScript to trigger the modal to show
-            document.querySelector('[data-modal-target="default-modal"]').click();
-        }
-    </script>
-
-
     <script>
         document.getElementById('cover_photo').addEventListener('change', function() {
             const fileInput = this;

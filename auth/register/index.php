@@ -81,7 +81,7 @@
     <div id="particles-js" class="absolute top-0 left-0 w-full h-full"></div>
     <div class="container mx-auto p-5 mt-16 relative z-10" style="background-color: rgba(0, 0, 0, 0.5); width: 350px; border-radius: 15px; box-shadow: 8px 8px 5px 0px rgba(0, 0, 0, 0.25);">
         <div class="text-center">
-            <img src="http://localhost/extroverse/img/extroverse.png" style="width: 110px;" alt="Avatar" class="mx-auto">
+            <img src="http://localhost/extroverse/logo/extroverse.png" style="width: 110px;" alt="Avatar" class="mx-auto">
             <hr>
             <h2 class="text-lg font-semibold text-white">R E G I S T R A S I</h2>
         </div>
