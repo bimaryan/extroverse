@@ -104,10 +104,12 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
     <title>Extroverse - Penjual</title>
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: Unbounded;
         }
 
         .container {
@@ -313,56 +315,53 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
             <div style="display: none;" id="eventCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">List Daftar Acara</h2>
                 <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="min-w-full divide-y divide-gray-200">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Cover Foto
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Nama Acara
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Deskripsi
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Tanggal
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Harga
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Jumlah Tiket
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Lokasi
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Tiket Terjual
                                     </div>
                                 </th>
-                                <th scope="col" class="border px-6 py-3">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Tiket Type
                                     </div>
-                                </th>
-                                <th scope="col" class="border px-6 py-3">
-
                                 </th>
                             </tr>
                         </thead>
@@ -373,17 +372,17 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                             // Check if $events is set and is an array or object
                             if (isset($events) && (is_array($events) || is_object($events))) {
                                 foreach ($events as $event) {
-                                    echo "<tr scope='col' class='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>";
-                                    echo "<td class='border'><img style='display: flex; justify-content: center; align-items: center; width: 50px; height: 50px; margin: auto' src='http://localhost/extroverse/img/{$event['cover_foto']}' alt='Cover Event' class='rounded-lg'></td>";
-                                    echo "<td class='border text-center' style=''>{$event['nama_acara']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['deskripsi']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['tanggal']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['harga']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['jumlah_tiket']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['lokasi']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['jumlah_tiket_terjual']}</td>";
-                                    echo "<td class='border text-center' style=''>{$event['tiket_type']}</td>";
-                                    echo "<td class='border text-center' style=''><a data-modal-target='default-modal' data-modal-toggle='default-modal' class='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-2 rounded-full'>Edit</a></td>";
+                                    echo "<tr scope='col' class=''>";
+                                    echo "<td class='px-6 py-4 whitespace-nowrap'><img style='display: flex; justify-content: center; align-items: center; width: 50px; height: 50px; margin: auto' src='http://localhost/extroverse/img/{$event['cover_foto']}' alt='Cover Event' class='rounded-lg'></td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['nama_acara']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['deskripsi']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['tanggal']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['harga']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['jumlah_tiket']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['lokasi']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['jumlah_tiket_terjual']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''>{$event['tiket_type']}</td>";
+                                    echo "<td class='text-center px-6 py-4 whitespace-nowrap' style=''><a data-modal-target='default-modal' data-modal-toggle='default-modal' class='text-blue-500 font-semibold py-1 px-2 rounded-full'>Edit</a></td>";
                                     echo "</tr>";
                                 }
                             } else {
@@ -469,7 +468,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
             </div>
 
         </div>
-    </div>
     </div>
     <script>
         document.getElementById('cover_photo').addEventListener('change', function() {

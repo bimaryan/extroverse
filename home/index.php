@@ -22,7 +22,13 @@ $email = $_SESSION['email'];
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
     <title>Extroverse</title>
+    <style>
+        body {
+            font-family: Unbounded;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
