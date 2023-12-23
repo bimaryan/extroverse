@@ -109,7 +109,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
     <style>
         body {
             background-color: #f8f9fa;
-            font-family: Unbounded;
         }
 
         .container {
@@ -189,10 +188,10 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                                     <?php echo $email; ?>
                                 </p>
                             </div>
-                            <hr class="bg-gray-200 border-1 dark:bg-gray-700"/>
+                            <hr class="bg-gray-200 border-1 dark:bg-gray-700" />
                             <ul class="py-1" role="none">
                                 <li>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Account</a>
+                                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer" role="menuitem" onclick="showCard('profile')">Account</a>
                                 </li>
                                 <li>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Register Distributor</a>
@@ -465,6 +464,17 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                 COMING SOON
             </div>
 
+            <div class="bg-white rounded-lg shadow p-6 mt-4" style="display: none;" id="profile">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Profil Penjual</h2>
+                <div class="flex items-center">
+                    <img class="w-16 h-16 rounded-full" src="<?php echo $data_user['profile_image'] ?>" alt="user photo">
+                    <div class="ms-4">
+                        <p class="text-lg font-semibold text-gray-900 dark:text-white"><?php echo $username; ?></p>
+                        <p class="text-sm text-gray-500 dark:text-gray-300"><?php echo $email; ?></p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <script>
@@ -486,7 +496,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
     <script>
         // Function to hide all cards
         function hideAllCards() {
-            var cards = ['eventCard', 'addCard', 'messageCard', 'customerCard', 'dataCard'];
+            var cards = ['eventCard', 'addCard', 'messageCard', 'customerCard', 'dataCard', 'profile'];
             cards.forEach(function(cardId) {
                 var card = document.getElementById(cardId);
                 if (card) {
