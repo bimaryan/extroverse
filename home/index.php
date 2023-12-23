@@ -24,11 +24,6 @@ $email = $_SESSION['email'];
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
     <title>Extroverse</title>
-    <style>
-        body {
-            font-family: Unbounded;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100">

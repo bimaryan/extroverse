@@ -253,10 +253,6 @@ $data = getAdminData($koneksi);
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
     <title>Extroverse - Admin</title>
     <style>
-        body {
-            font-family: Unbounded;
-        }
-
         .hvr:hover {
             color: black
         }
@@ -285,7 +281,12 @@ $data = getAdminData($koneksi);
                         <div>
                             <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                 <span class="sr-only">Open user menu</span>
-                                <img class="w-8 h-8 rounded-full" src="<?php echo $data_user['profile_image'] ?>" alt="user photo">
+                                <?php if (!empty($userProfile['profile_image'])) : ?>
+                                    <img src="<?php echo $userProfile['profile_image']; ?>" alt="Profile Image" class="w-8 h-8 rounded-full">
+                                <?php else : ?>
+                                    <img src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="Default Image" class="w-8 h-8 rounded-full">
+                                <?php endif; ?>
+                                <!-- <img class="w-8 h-8 rounded-full" src="<?php echo $userProfile['profile_image']; ?>" alt="user photo"> -->
                             </button>
                         </div>
                         <div class="max-w-full z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
@@ -303,7 +304,7 @@ $data = getAdminData($koneksi);
                                     <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer" role="menuitem" onclick="showCard('profile')">Account</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Register Distributor</a>
+                                    <a href="../daftar_distributor/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Register Distributor</a>
                                 </li>
                                 <li>
                                     <a href="http://localhost/extroverse/auth/logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
@@ -336,11 +337,6 @@ $data = getAdminData($koneksi);
                         <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
                     </a>
                 </li>
-                <!-- <li>
-                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('customerCard')">
-                        <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-people"></i> View Users</span>
-                    </a>
-                </li> -->
                 <li>
                     <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('eventCard')">
                         <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-calendar4-event"></i> Events</span>
@@ -591,25 +587,23 @@ $data = getAdminData($koneksi);
                 <h1 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">User Profile</h1>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="col-1">
+                    <div class="col-1 text-center">
                         <?php if (!empty($userProfile['profile_image'])) : ?>
-                            <!-- Display user profile image if available -->
-                            <img src="<?php echo $userProfile['profile_image']; ?>" alt="Profile Image" class="w-full max-w-sm h-auto rounded mb-4">
+                            <img src="<?php echo $userProfile['profile_image']; ?>" alt="Profile Image" class="mx-auto max-w-full h-auto rounded">
                         <?php else : ?>
-                            <!-- Display a default image or a placeholder if profile image is not available -->
-                            <img src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="Default Image" class="w-full max-w-sm h-auto rounded mb-4">
+                            <img src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="Default Image" class="mx-auto max-w-full h-auto rounded">
                         <?php endif; ?>
                     </div>
-                    <div class="col-1 md:col-2 lg:col-2">
+                    <div class="col-1">
                         <form class="space-y-2" action="" method="POST" enctype="multipart/form-data">
                             <!-- Add enctype="multipart/form-data" for handling file uploads -->
                             <div>
                                 <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                                <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value="<?php echo $username; ?>" required>
+                                <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value="<?php echo $username; ?>" readonly>
                             </div>
                             <div>
                                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value="<?php echo $email; ?>" required>
+                                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value="<?php echo $email; ?>" readonly>
                             </div>
                             <div>
                                 <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
@@ -617,7 +611,7 @@ $data = getAdminData($koneksi);
                             </div>
                             <div>
                                 <label for="profile_image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Image</label>
-                                <input type="file" name="profile_image" id="profile_image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <input type="file" name="profile_image" id="profile_image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
                             </div>
                             <div>
                                 <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Profile</button>
