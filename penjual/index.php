@@ -184,6 +184,17 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
         <div class="rounded-lg mt-14">
             <div class="bg-white rounded-lg shadow p-6 mt-4" id="dashboard">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
+                <div class="text-center grid grid-cols-3 gap-4">
+                    <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
+                        
+                    </div>
+                    <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
+                        
+                    </div>
+                    <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
+                        
+                    </div>
+                </div>
             </div>
             <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambahkan Acara</h2>

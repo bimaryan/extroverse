@@ -367,7 +367,6 @@ $data = getAdminData($koneksi);
                             <?php echo $eventCount; ?> <br />
                             <span class="text-base">Events</span>
                         </p>
-                        <p class="text-white"></p>
                     </div>
                     <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
                         <p class="text-3xl text-white">
