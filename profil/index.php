@@ -1,82 +1,17 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "pengguna") {
     header("Location: ../auth/login/");
     exit();
 }
 
+require_once "../db.php";
+
+$user_id = $_SESSION['user_id'];
 $role = $_SESSION["role"];
 $username = $_SESSION["username"];
 $email = $_SESSION['email'];
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require_once "../db.php"; // Ganti dengan path yang sesuai ke file koneksi database Anda.
-
-    $user_id = $_SESSION["user_id"];
-    $username = $_POST["username"];
-    $email = $_POST["email"];
-
-    // Validasi dan lakukan update profil ke database di sini.
-    // Pastikan untuk memvalidasi input, misalnya, memeriksa apakah tanggal lahir sesuai format atau nomor telepon valid.
-    if (empty($username)) {
-        header("Location: ../profil/?error=empty_fields");
-        exit();
-    }
-
-    // Menerima unggahan gambar profil
-    $profile_image = $_FILES['profile_image']['name'];
-    $profile_image_tmp = $_FILES['profile_image']['tmp_name'];
-
-    // Pindahkan gambar ke folder penyimpanan (misalnya, folder "uploads")
-    $target_dir = "img/";
-    $target_file = $target_dir . basename($profile_image);
-
-    // Periksa apakah file gambar berhasil diunggah
-    if (!empty($profile_image)) {
-        if (move_uploaded_file($profile_image_tmp, $target_file)) {
-            // File berhasil diunggah, maka Anda bisa menyimpan nama file ini di database
-            $update_query = "UPDATE users SET username = ?, email = ?, profile_image = ? WHERE user_id = ?";
-            $stmt = mysqli_prepare($koneksi, $update_query);
-            mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $profile_image, $user_id);
-
-            if (mysqli_stmt_execute($stmt)) {
-                // Pembaruan berhasil dilakukan.
-                header("Location: ../profil/?success=true");
-                exit();
-            } else {
-                // Pembaruan gagal, Anda bisa menangani kesalahan sesuai kebutuhan.
-                header("Location: ../profil/?error=update_failed");
-                exit();
-            }
-
-            mysqli_stmt_close($stmt);
-        } else {
-            // File gagal diunggah, Anda bisa menangani kesalahan sesuai kebutuhan.
-            header("Location: ../profil/?error=upload_failed");
-            exit();
-        }
-    } else {
-        // File gambar kosong, lanjutkan dengan pembaruan data profil tanpa mengubah gambar
-        $update_query = "UPDATE users SET username = ?, email = ? WHERE user_id = ?";
-        $stmt = mysqli_prepare($koneksi, $update_query);
-        mysqli_stmt_bind_param($stmt, "ssi", $username, $email, $user_id);
-
-        if (mysqli_stmt_execute($stmt)) {
-            // Pembaruan berhasil dilakukan.
-            header("Location: ../profil/?success=true");
-            exit();
-        } else {
-            // Pembaruan gagal, Anda bisa menangani kesalahan sesuai kebutuhan.
-            header("Location: ../profil/?error=update_failed");
-            exit();
-        }
-
-        mysqli_stmt_close($stmt);
-    }
-
-    mysqli_close($koneksi);
-}
 
 ?>
 
@@ -91,11 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
-    <title>Extroverse</title>
+    <title>Extroverse - Profil</title>
 </head>
 
 <body class="bg-gray-100">
-
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="http://localhost/extroverse/" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -112,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </svg>
                                 <span class="sr-only">Search icon</span>
                             </div>
-                            <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search...">
+                            <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari event...">
                         </div>
                     </div>
                 </a>
@@ -131,11 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <a href="http://localhost/extroverse/profil" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Account</a>
                         </li>
                         <li>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
+                            <a href="../daftar_distributor/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Register Distributor</a>
                         </li>
-                        <!-- <li>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
-                        </li> -->
                         <li>
                             <a href="http://localhost/extroverse/auth/logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
                         </li>
@@ -157,99 +88,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
                             </div>
-                            <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search...">
+                            <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari event...">
                         </div>
                     </li>
-                    <!-- <li>
-                        <a href="http://localhost/extroverse/" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
-                    </li>
-                    <li>
-                        <a href="../event/buat_acara/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Buat Acara</a>
-                    </li>
-                    <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Riwayat Pembelian</a>
-                    </li> -->
-                    <!-- <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Pricing</a>
-                    </li>
-                    <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-                    </li> -->
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container mx-auto p-3">
         <div class="mt-2 mb-4">
             <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
         </div>
-        <!-- Konten Profil Pengguna -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mt-4">
-            <h2 class="text-2xl font-semibold mb-4 text-center">Profile Data</h2>
-            <hr />
-            <form class="mt-4" action="" method="POST">
-                <!-- <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Current Profile Picture</label>
-                    <img src="../profil/img/ <?php echo $target_file; ?>" alt="Profile Picture" class="w-32 h-32 rounded-full">
+        <div class="bg-white rounded-lg shadow p-6 mt-4" id="profile">
+            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Profil Penjual</h2>
+            <div class="flex items-center">
+                <img class="w-16 h-16 rounded-full" src="<?php echo $data_user['profile_image'] ?>" alt="user photo">
+                <div class="ms-4">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white"><?php echo $username; ?></p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300"><?php echo $email; ?></p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">Role: <?php echo $role; ?></p>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="profile_image">Profile Picture</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="profile_image" type="file" name="profile_image">
-                </div> -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" id="email" name="email" value="<?php echo $email; ?>" readonly><br>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" name="username" value="<?php echo $username; ?>" readonly>
-                </div>
-                <!-- <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="dob">Date of Birth</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="dob" type="date" name="dob" value="<?php echo $dob; ?>">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Gender</label>
-                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="gender" name="gender">
-                        <option value="male" <?php echo (isset($gender) && $gender === 'male') ? 'selected' : ''; ?>>Male</option>
-                        <option value="female" <?php echo (isset($gender) && $gender === 'female') ? 'selected' : ''; ?>>Female</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="job">Job</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="job" type="text" name="job" value="<?php echo $_SESSION['job']; ?>">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">Phone Number</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="tel" name="phone" value="<?php echo $_SESSION['phone']; ?>">
-                </div> -->
-                <!-- Tambahkan bidang lainnya sesuai kebutuhan -->
-                <!-- <div class="mb-4">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">Submit</button>
-                </div> -->
-            </form>
-            <div class="mb-4">
-                <a href="../event/daftar_acara/" class="bg-purple-500 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">List Daftar Acara</a>
             </div>
         </div>
     </div>
-
-    <script>
-        const profileButton = document.getElementById("profileButton");
-        const profilePopup = document.getElementById("profilePopup");
-
-        profileButton.addEventListener("click", () => {
-            profilePopup.classList.toggle("hidden");
-        });
-
-        // Sembunyikan pop-up saat mengklik di luar pop-up
-        window.addEventListener("click", (e) => {
-            if (!profileButton.contains(e.target) && !profilePopup.contains(e.target)) {
-                profilePopup.classList.add("hidden");
-            }
-        });
-    </script>
 </body>
 
 </html>

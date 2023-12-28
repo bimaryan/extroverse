@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "penjual") {
     header("Location: http://localhost/extroverse/auth/login");
     exit();
 }
-// Pastikan Anda sudah membuat koneksi ke database
 require_once "../db.php";
 
 $user_id = $_SESSION['user_id'];
@@ -16,29 +15,23 @@ $email = $_SESSION['email'];
 $query_logo = mysqli_query($koneksi, "SELECT profile_image FROM users WHERE user_id = '$user_id'");
 
 $data_user = mysqli_fetch_assoc($query_logo);
-
-// Retrieve event details from the database
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari formulir
     $nama_acara = $_POST["nama_acara"];
     $deskripsi = $_POST["deskripsi"];
     $tanggal = $_POST["tanggal"];
     $harga = $_POST["harga"];
     $jumlah_tiket = $_POST["jumlah_tiket"];
     $lokasi = $_POST["lokasi"];
-    $jumlah_tiket_terjual = 0; // Jumlah tiket terjual awalnya 0
+    $jumlah_tiket_terjual = 0;
     $tiket_type = $_POST["tiket_type"];
 
     $user_id = $_SESSION["user_id"];
 
-    // Proses unggahan cover foto
-    $target_directory = "../img/"; // Direktori tempat Anda ingin menyimpan file
+    $target_directory = "../img/";
     $target_file = $target_directory . basename($_FILES["cover_foto"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Cek apakah file gambar atau bukan
     if (isset($_POST["submit"])) {
         $check = getimagesize($_FILES["cover_foto"]["tmp_name"]);
         if ($check !== false) {
@@ -48,19 +41,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Cek jika file sudah ada
     if (file_exists($target_file)) {
         echo "Maaf, file tersebut sudah ada.";
         $uploadOk = 0;
     }
 
-    // Cek ukuran file
-    if ($_FILES["cover_foto"]["size"] > 5000000) { // Batas ukuran file dalam byte (contoh: 5MB)
+    if ($_FILES["cover_foto"]["size"] > 5000000) {
         echo "Maaf, ukuran file terlalu besar.";
         $uploadOk = 0;
     }
 
-    // Izinkan hanya format file gambar tertentu
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
         echo "Maaf, hanya file JPG, JPEG, PNG, dan GIF yang diizinkan.";
         $uploadOk = 0;
@@ -70,29 +60,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Maaf, file Anda tidak dapat diunggah.";
     } else {
         if (move_uploaded_file($_FILES["cover_foto"]["tmp_name"], $target_file)) {
-            // File gambar berhasil diunggah, Anda dapat menyimpan nama file di database
-            // Insert data ke tabel events
             $query = "INSERT INTO events (user_id, nama_acara, deskripsi, tanggal, harga, jumlah_tiket, lokasi, jumlah_tiket_terjual, cover_foto, tiket_type)
 VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type')";
 
             if (mysqli_query($koneksi, $query)) {
-                // Event berhasil ditambahkan, Anda dapat mengarahkan pengguna ke halaman lain atau memberikan pesan sukses
-                header("Location: ./"); // Ganti dengan halaman tujuan setelah event berhasil dibuat
+                header("Location: ./");
                 exit();
             } else {
-                // Terjadi kesalahan, Anda dapat menampilkan pesan kesalahan atau mengarahkan pengguna kembali ke halaman buat acara
                 echo "Terjadi kesalahan saat membuat acara: " . mysqli_error($koneksi);
             }
         } else {
             echo "Maaf, terjadi kesalahan saat mengunggah file.";
         }
     }
-
-    // Tutup koneksi ke database jika sudah tidak digunakan
     mysqli_close($koneksi);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -106,56 +89,9 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
     <title>Extroverse - Penjual</title>
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .event-form {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-        }
-
-        .submit-button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .submit-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 
 <body>
-
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
@@ -194,7 +130,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                                     <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer" role="menuitem" onclick="showCard('profile')">Account</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Register Distributor</a>
+                                    <a href="../daftar_distributor/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Register Distributor</a>
                                 </li>
                                 <li>
                                     <a href="http://localhost/extroverse/auth/logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
@@ -206,12 +142,11 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
             </div>
         </div>
     </nav>
-
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul class="space-y-2 font-medium">
                 <li>
-                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('dashboard')">
                         <span class="ms-3"><i class="bi bi-house-door"></i> Dashboard</span>
                     </a>
                 </li>
@@ -242,19 +177,15 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                         <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-graph-up"></i> Rekapan Data</span>
                     </a>
                 </li>
-                <!-- <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-
-                        <span class="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
-                    </a>
-                </li> -->
             </ul>
         </div>
     </aside>
-
     <div class="p-4 sm:ml-64">
         <div class="rounded-lg mt-14">
-            <div id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
+            <div class="bg-white rounded-lg shadow p-6 mt-4" id="dashboard">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
+            </div>
+            <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambahkan Acara</h2>
                 <form method="POST" action="" enctype="multipart/form-data">
                     <div class="mb-4">
@@ -298,17 +229,14 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                     </div>
                 </form>
             </div>
-
             <div style="display: none;" id="messageCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Pesan</h2>
                 COMING SOON
             </div>
-
             <div style="display: none;" id="customerCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Pelanggan</h2>
                 COMING SOON
             </div>
-
             <div style="display: none;" id="eventCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">List Daftar Acara</h2>
                 <div class="relative overflow-x-auto">
@@ -366,7 +294,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                             <?php
                             $query_event = mysqli_query($koneksi, "SELECT * FROM events WHERE user_id = '$user_id' ");
                             $events = mysqli_fetch_all($query_event, MYSQLI_ASSOC);
-                            // Check if $events is set and is an array or object
                             if (isset($events) && (is_array($events) || is_object($events))) {
                                 foreach ($events as $event) {
                                     echo "<tr scope='col' class=''>";
@@ -458,12 +385,10 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                     </div>
                 </div>
             </div>
-
             <div style="display: none;" id="dataCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Rekapan Data</h2>
                 COMING SOON
             </div>
-
             <div class="bg-white rounded-lg shadow p-6 mt-4" style="display: none;" id="profile">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Profil Penjual</h2>
                 <div class="flex items-center">
@@ -471,10 +396,10 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                     <div class="ms-4">
                         <p class="text-lg font-semibold text-gray-900 dark:text-white"><?php echo $username; ?></p>
                         <p class="text-sm text-gray-500 dark:text-gray-300"><?php echo $email; ?></p>
+                        <p class="text-sm text-gray-500 dark:text-gray-300">Role: <?php echo $role; ?></p>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <script>
@@ -488,15 +413,14 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
 
                 if (fileSizeBytes > maxSizeBytes) {
                     alert('File size exceeds the maximum allowed size (5MB). Please choose a smaller file.');
-                    fileInput.value = ''; // Clear the file input
+                    fileInput.value = '';
                 }
             }
         });
     </script>
     <script>
-        // Function to hide all cards
         function hideAllCards() {
-            var cards = ['eventCard', 'addCard', 'messageCard', 'customerCard', 'dataCard', 'profile'];
+            var cards = ['eventCard', 'addCard', 'messageCard', 'customerCard', 'dataCard', 'profile', 'dashboard'];
             cards.forEach(function(cardId) {
                 var card = document.getElementById(cardId);
                 if (card) {
@@ -505,7 +429,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
             });
         }
 
-        // Function to show specific card
         function showCard(cardId) {
             hideAllCards();
             var card = document.getElementById(cardId);
@@ -513,9 +436,6 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                 card.style.display = 'block';
             }
         }
-
-        // Use these functions in your onclick attributes
-        // For example: onclick="showCard('eventCard')"
     </script>
 
 </body>

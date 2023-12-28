@@ -53,52 +53,30 @@ if (isset($_GET['event_id'])) {
                     <div class="mt-2">
                         <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
                     </div>
-
-                    <div class="w-full bg-white border rounded-lg p-4 mt-4">
-                        <div class="w-full h-full overflow-hidden mb-5 mx-auto flex items-center justify-center">
-                            <img src="http://localhost/extroverse/img/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="rounded-lg" style="width: 500px; height: 500px">
+                    <div class="mt-4">
+                        <div class="bg-white rounded-lg shadow p-4 mt-4 w-full">
+                            <h2 class="text-2xl font-semibold"><?php echo $event['nama_acara']; ?></h2>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-3xl font-semibold mb-4"><?php echo $event['nama_acara']; ?></h2>
-                            <button id="shareButton" class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-full" type="button"><i class="bi bi-share-fill"></i></button>
-                        </div>
-                        <p class="mb-8 text-lg font-semibold">Description</p>
-                        <p class="text-sm mb-2 text-gray-500"><?php echo nl2br($event['deskripsi']); ?></p>
-                        <hr />
-                        <div class="flex justify-between items-center mt-5 text-gray-500">
-                            <p class="mb-2">Tanggal</p>
-                            <p class="mb-2 font-semibold"><?php echo $event['tanggal']; ?></p>
-                        </div>
-                        <div class="flex justify-between items-center mt-2 text-gray-500">
-                            <p class="mb-2">Tiket Terjual</p>
-                            <p class="mb-2 font-semibold"><?php echo $event['jumlah_tiket_terjual']; ?></p>
-                        </div>
-                        <div class="flex justify-between items-center mt-2 text-gray-500">
-                            <p class="mb-2">Harga</p>
-                            <p class="mb-2 font-semibold">Rp <?php echo number_format($event['harga'], 2); ?></p>
-                        </div>
-                        <div class="flex justify-between items-center mt-5 text-gray-500">
-                            <!-- Tombol Chat Admin (sebelah kiri) -->
-                            <div>
-                                <button class="bg-purple-500 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-full" type="button">Chat</button>
+                        <div id="event" class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+                            <div class="overflow-hidden mx-auto flex items-center justify-center">
+                                <img src="http://localhost/extroverse/img/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="rounded-lg">
                             </div>
-
-                            <!-- Tombol Beli Tiket (di tengah) -->
-                            <div>
-                                <form action="http://localhost/extroverse/event/checkout/" method="post">
-                                    <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
-                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit" onclick="buyTicket()">Checkout</button>
-                                </form>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+                            <div class="flex items-center justify-between">
+                                <span class="text">Rp <?php echo number_format($event['harga'], 2); ?></span>
+                                <a href="../../event/checkout/" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Buy</a>
                             </div>
-
-                            <!-- Tombol Chart (sebelah kanan) -->
-                            <div>
-                                <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full" type="button">Cart</button>
-                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+                            <h3 class="text-2xl font-semibold mb-2">Description</h3>
+                            <hr class="h-px mb-2 bg-gray-200 border-0 dark:bg-gray-700" />
+                            <p><?php echo nl2br($event['deskripsi']); ?></p>
                         </div>
                     </div>
                 </div>
 
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                 <script>
                     const profileButton = document.getElementById("profileButton");
                     const profilePopup = document.getElementById("profilePopup");
@@ -139,18 +117,6 @@ if (isset($_GET['event_id'])) {
                             });
                         });
                     });
-                </script>
-                <script>
-                    function buyTicket() {
-                        <?php if (!isset($_SESSION["user_id"])) : ?>
-                            // Redirect to the login page if the user is not logged in
-                            window.location.href = '../auth/login/';
-                        <?php else : ?>
-                            // Add the logic for buying the ticket here
-                            // For example, you can show a modal or perform other actions
-                            // ...
-                        <?php endif; ?>
-                    }
                 </script>
             </body>
 

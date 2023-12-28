@@ -4,7 +4,7 @@ session_start();
 require_once "../db.php";
 
 // Check if the user is logged in and has the admin role
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "admin") {
     header('Location: http://localhost/extroverse/auth/login'); // Redirect to login page if not logged in or not an admin
     exit();
 }
