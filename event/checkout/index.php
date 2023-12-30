@@ -172,12 +172,18 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                 <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
 
                 <form method="post" action="">
-                    <div>
-                        <div class="bg-gray-500 p-3 dark:bg-gray-700 rounded-lg" style="width: 50px;">
-                        1
+                    <div class="flex items-center justify-between">
+                        <div class="text-lg">
+                            <p><?php echo $product['tiket_type']; ?></p>
                         </div>
-                        <p><?php echo $product['tiket_type']; ?></p>
+
+                        <!-- Checkbox to indicate the same registration data -->
+                        <div class="my-2">
+                            <input type="checkbox" id="sameAsRegistration" name="sameAsRegistration" class="mr-2" />
+                            <label for="sameAsRegistration" class="text-sm text-gray-600">Same as Registration Data</label>
+                        </div>
                     </div>
+
                     <!-- Name Input -->
                     <div class="my-2 col-span-3">
                         <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
@@ -228,6 +234,29 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
             </div> -->
         </div>
     </div>
+
+    <script>
+        // Add JavaScript to disable/enable fields based on checkbox state
+        const sameAsRegistrationCheckbox = document.getElementById('sameAsRegistration');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const dayInput = document.getElementById('day');
+        const monthInput = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+        const genderSelect = document.getElementById('gender');
+
+        sameAsRegistrationCheckbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+
+            // Disable/enable fields based on checkbox state
+            nameInput.disabled = isChecked;
+            emailInput.disabled = isChecked;
+            dayInput.disabled = isChecked;
+            monthInput.disabled = isChecked;
+            yearInput.disabled = isChecked;
+            genderSelect.disabled = isChecked;
+        });
+    </script>
 </body>
 
 </html>
