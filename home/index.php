@@ -48,7 +48,7 @@ $email = $_SESSION['email'];
                                     <div class="relative overflow-hidden">
                                         <div style="width: 1226px; height: 239px; justify-content: flex-end; align-items: center; display: inline-flex;">
                                             <div style="width: 1956px; align-self: stretch; position: relative;">
-                                                <img src="../img/<?php echo $row_terbaru['cover_foto']; ?>" style="width: 459px; height: 239px; left: 0px; top: 0px; position: absolute;" />
+                                                <img src="<?php echo $row_terbaru['cover_foto']; ?>" style="width: 459px; height: 239px; left: 0px; top: 0px; position: absolute;" />
                                             </div>
                                         </div>
                                         <!-- <div class="w-full overflow-hidden mb-5">
@@ -89,7 +89,7 @@ $email = $_SESSION['email'];
                                 <a href="../event/event_detail/?event_id=<?php echo $row_top['event_id']; ?>">
                                     <div class="relative">
                                         <div class="w-full h-64 overflow-hidden mb-5">
-                                            <img src="../img/<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full rounded-lg">
+                                            <img src="<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full rounded-lg">
                                         </div>
                                         <p class="mb-2 absolute top-2 right-2 bg-white p-2 rounded font-semibold text-lg"><?php echo $row_top['tanggal']; ?></p>
                                     </div>
