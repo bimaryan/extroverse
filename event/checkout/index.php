@@ -102,7 +102,10 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
         </div>
     </nav>
     <div class="container mx-auto p-3">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="mt-2">
+            <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
             <?php foreach ($products as $product) : ?>
                 <div class="bg-white rounded-lg p-4 shadow">
                     <h2 class="text-2xl font-semibold text-center">Event Detail</h2>
