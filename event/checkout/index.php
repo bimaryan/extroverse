@@ -126,229 +126,237 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                     </div>
                 </div>
             <?php endforeach; ?>
-            <div class="bg-white rounded-lg p-4 shadow">
-                <h2 class="text-2xl font-semibold text-center">Registration Data</h2>
-                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+            <div  class="flex flex-col gap-4">
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h2 class="text-2xl font-semibold text-center">Registration Data</h2>
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
 
-                <form method="post" action="" class="grid grid-cols-3 gap-4">
-                    <!-- Name Input -->
-                    <div class="my-2 col-span-3">
-                        <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
-                        <input type="text" id="name" name="name" placeholder="Enter your name" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <!-- Email Input -->
-                    <div class="my-2 col-span-3">
-                        <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <!-- Date Input (Day) -->
-                    <div class="my-2">
-                        <label for="day" class="block text-sm font-medium text-gray-600">Day:</label>
-                        <input type="number" id="day" name="day" placeholder="DD" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <!-- Date Input (Month) -->
-                    <div class="my-2">
-                        <label for="month" class="block text-sm font-medium text-gray-600">Month:</label>
-                        <input type="number" id="month" name="month" placeholder="MM" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <!-- Date Input (Year) -->
-                    <div class="my-2">
-                        <label for="year" class="block text-sm font-medium text-gray-600">Year:</label>
-                        <input type="number" id="year" name="year" placeholder="YYYY" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <!-- Gender Input -->
-                    <div class="my-2 col-span-3">
-                        <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
-                        <select id="gender" name="gender" class="mt-1 p-2 border rounded-md w-full">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-
-            <div class="bg-white rounded-lg p-4 shadow">
-                <h2 class="text-2xl font-semibold text-center">Ticket User</h2>
-                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-
-                <form method="post" action="">
-                    <div class="flex items-center justify-between">
-                        <div class="text-lg">
-                            <p><?php echo $product['tiket_type']; ?></p>
+                    <form method="post" action="" id="sameAsRegistration">
+                        <!-- Name Input -->
+                        <div class="my-2 col-span-3">
+                            <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" class="mt-1 p-2 border rounded-md w-full" />
                         </div>
 
-                        <!-- Checkbox to indicate the same registration data -->
-                        <div class="my-2">
-                            <input type="checkbox" id="sameAsRegistration" name="sameAsRegistration" class="mr-2" />
-                            <label for="sameAsRegistration" class="text-sm text-gray-600">Same as Registration
-                                Data</label>
-                        </div>
-                    </div>
-
-                    <!-- Name Input -->
-                    <div class="my-2 col-span-3">
-                        <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
-                        <input type="text" id="name" name="name" placeholder="Enter your name" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <!-- Email Input -->
-                    <div class="my-2 col-span-3">
-                        <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" class="mt-1 p-2 border rounded-md w-full" />
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-4">
-                        <!-- Date Input (Day) -->
-                        <div class="my-2">
-                            <label for="day" class="block text-sm font-medium text-gray-600">Day:</label>
-                            <input type="number" id="day" name="day" placeholder="DD" class="mt-1 p-2 border rounded-md w-full" />
+                        <!-- Email Input -->
+                        <div class="my-2 col-span-3">
+                            <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" class="mt-1 p-2 border rounded-md w-full" />
                         </div>
 
-                        <!-- Date Input (Month) -->
-                        <div class="my-2">
-                            <label for="month" class="block text-sm font-medium text-gray-600">Month:</label>
-                            <input type="number" id="month" name="month" placeholder="MM" class="mt-1 p-2 border rounded-md w-full" />
+                        <div class="grid grid-cols-3 gap-4">
+                            <!-- Date Input (Day) -->
+                            <div class="my-2">
+                                <label for="day" class="block text-sm font-medium text-gray-600">Day:</label>
+                                <input type="number" id="day" name="day" placeholder="DD" class="mt-1 p-2 border rounded-md w-full" />
+                            </div>
+
+                            <!-- Date Input (Month) -->
+                            <div class="my-2">
+                                <label for="month" class="block text-sm font-medium text-gray-600">Month:</label>
+                                <input type="number" id="month" name="month" placeholder="MM" class="mt-1 p-2 border rounded-md w-full" />
+                            </div>
+
+                            <!-- Date Input (Year) -->
+                            <div class="my-2">
+                                <label for="year" class="block text-sm font-medium text-gray-600">Year:</label>
+                                <input type="number" id="year" name="year" placeholder="YYYY" class="mt-1 p-2 border rounded-md w-full" />
+                            </div>
                         </div>
 
-                        <!-- Date Input (Year) -->
-                        <div class="my-2">
-                            <label for="year" class="block text-sm font-medium text-gray-600">Year:</label>
-                            <input type="number" id="year" name="year" placeholder="YYYY" class="mt-1 p-2 border rounded-md w-full" />
+                        <div class="my-2 col-span-3">
+                            <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number:</label>
+                            <input type="text" id="phone" name="phone" placeholder="+6285157433395" class="mt-1 p-2 border rounded-md w-full" />
                         </div>
-                    </div>
 
-                    <!-- Gender Input -->
-                    <div class="my-2 col-span-3">
-                        <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
-                        <select id="gender" name="gender" class="mt-1 p-2 border rounded-md w-full">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="bg-white rounded-lg p-4 shadow">
-                <h2 class="text-2xl font-semibold text-center">Ticket Quantity</h2>
-                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+                        <!-- Gender Input -->
+                        <div class="my-2 col-span-3">
+                            <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
+                            <select id="gender" name="gender" class="mt-1 p-2 border rounded-md w-full">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h2 class="text-2xl font-semibold text-center">Ticket User</h2>
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
 
-                <p class="text-lg"><?php echo $product['nama_acara']; ?></p>
+                    <form method="post" action="">
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg">
+                                <p><?php echo $product['tiket_type']; ?></p>
+                            </div>
 
-                <div class="flex items-center">
-                    <h1 id="hargaTotal" class="mr-4"><?php echo $product['harga']; ?></h1>
+                            <!-- Checkbox to indicate the same registration data -->
+                            <div class="my-2">
+                                <input type="checkbox" id="sameAsRegistration" name="sameAsRegistration" class="mr-2" />
+                                <label for="sameAsRegistration" class="text-sm text-gray-600">Same as Registration
+                                    Data</label>
+                            </div>
+                        </div>
 
-                    <div class="flex items-center space-x-2">
-                        <input type="text" id="jumlahProduk" value="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center w-16" />
-                        <button onclick="kurangiJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">-</button>
-                        <button onclick="tambahJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">+</button>
+                        <!-- Name Input -->
+                        <div class="my-2 col-span-3">
+                            <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" class="mt-1 p-2 border rounded-md w-full" />
+                        </div>
+
+                        <!-- Email Input -->
+                        <div class="my-2 col-span-3">
+                            <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" class="mt-1 p-2 border rounded-md w-full" />
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4">
+                            <!-- Date Input (Day) -->
+                            <div class="my-2">
+                                <label for="day" class="block text-sm font-medium text-gray-600">Day:</label>
+                                <input type="number" id="day" name="day" placeholder="DD" class="mt-1 p-2 border rounded-md w-full" />
+                            </div>
+
+                            <!-- Date Input (Month) -->
+                            <div class="my-2">
+                                <label for="month" class="block text-sm font-medium text-gray-600">Month:</label>
+                                <input type="number" id="month" name="month" placeholder="MM" class="mt-1 p-2 border rounded-md w-full" />
+                            </div>
+
+                            <!-- Date Input (Year) -->
+                            <div class="my-2">
+                                <label for="year" class="block text-sm font-medium text-gray-600">Year:</label>
+                                <input type="number" id="year" name="year" placeholder="YYYY" class="mt-1 p-2 border rounded-md w-full" />
+                            </div>
+                        </div>
+
+                        <div class="my-2 col-span-3">
+                            <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number:</label>
+                            <input type="text" id="phone" name="phone" placeholder="+6285157433395" class="mt-1 p-2 border rounded-md w-full" />
+                        </div>
+
+                        <!-- Gender Input -->
+                        <div class="my-2 col-span-3">
+                            <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
+                            <select id="gender" name="gender" class="mt-1 p-2 border rounded-md w-full">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h2 class="text-2xl font-semibold text-center">Ticket Quantity</h2>
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
+                    <p class="text-lg"><?php echo $product['nama_acara']; ?></p>
+
+                    <div class="flex justify-between items-center">
+                        <!-- Total Price on the left -->
+                        <h1 id="hargaTotal"><?php echo $product['harga']; ?></h1>
+
+                        <!-- Quantity-related elements on the right -->
+                        <div class="flex items-center space-x-2">
+                            <!-- Minus Button -->
+                            <button onclick="kurangiJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">-</button>
+
+                            <!-- Quantity Input -->
+                            <input type="text" id="jumlahProduk" value="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center w-16" />
+
+                            <!-- Plus Button -->
+                            <button onclick="tambahJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">+</button>
+                        </div>
                     </div>
                 </div>
-                <script>
-                    let jumlah = 0; // Jumlah produk awal
-                    const hargaPerTiket = <?php echo $product['harga']; ?>; // Ambil harga per tiket dari PHP
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h2 class="text-2xl font-semibold text-center">Payment Method</h2>
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
 
-                    function updateHarga() {
-                        const hargaTotal = jumlah * hargaPerTiket;
-                        document.getElementById('hargaTotal').textContent = hargaTotal;
-                    }
+                    <button onclick="showBankOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Bank
+                        Transfer</button>
+                    <button onclick="showEwalletOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">E-Wallet</button>
+                    <button onclick="showOtherOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Other</button>
 
-                    function tambahJumlah() {
-                        jumlah++;
-                        document.getElementById('jumlahProduk').value = jumlah;
-                        updateHarga();
-                    }
+                    <div id="bankOptions" class="hidden">
+                        <!-- Opsi Bank Transfer -->
+                        <p>Pilihan Pembayaran Melalui Bank:</p>
+                        <ul>
+                            <li>Bank Mandiri</li>
+                            <li>Bank BRI (Bank Rakyat Indonesia)</li>
+                            <li>BCA (Bank Central Asia)</li>
+                            <li>Bank BNI (Bank Negara Indonesia)</li>
+                            <li>Bank CIMB Niaga</li>
+                            <li>Bank Danamon</li>
+                            <!-- Tambahkan bank-bank lainnya sesuai kebutuhan -->
+                        </ul>
+                    </div>
 
-                    function kurangiJumlah() {
-                        if (jumlah > 1) {
-                            jumlah--;
-                            document.getElementById('jumlahProduk').value = jumlah;
-                            updateHarga();
-                        }
-                    }
-                </script>
+
+                    <div id="ewalletOptions" class="hidden">
+                        <!-- Opsi E-Wallet -->
+                        <p>Pilihan Pembayaran Melalui E-Wallet:</p>
+                        <ul>
+                            <li>Dana</li>
+                            <li>ShopeePay</li>
+                            <li>Gopay</li>
+                            <!-- Tambahkan bank-bank lainnya sesuai kebutuhan -->
+                        </ul>
+                    </div>
+
+                    <div id="otherOptions" class="hidden">
+                        <!-- Opsi Pembayaran Lainnya -->
+                        <ul>
+                            <li>MOHON MAAF SAAT INI BELUM TERSEDIA METODE LAIN !!</li>
+                        </ul>
+                        <!-- Isi dengan elemen-elemen pilihan pembayaran lainnya -->
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow">
-                <h2 class="text-2xl font-semibold text-center">Payment Method</h2>
-                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-
-                <button onclick="showBankOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Bank
-                    Transfer</button>
-                <button onclick="showEwalletOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">E-Wallet</button>
-                <button onclick="showOtherOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Other</button>
-
-                <div id="bankOptions" class="hidden">
-                    <!-- Opsi Bank Transfer -->
-                    <p>Pilihan Pembayaran Melalui Bank:</p>
-                    <ul>
-                        <li>Bank Mandiri</li>
-                        <li>Bank BRI (Bank Rakyat Indonesia)</li>
-                        <li>BCA (Bank Central Asia)</li>
-                        <li>Bank BNI (Bank Negara Indonesia)</li>
-                        <li>Bank CIMB Niaga</li>
-                        <li>Bank Danamon</li>
-                        <!-- Tambahkan bank-bank lainnya sesuai kebutuhan -->
-                    </ul>
-                </div>
-
-
-                <div id="ewalletOptions" class="hidden">
-                    <!-- Opsi E-Wallet -->
-                    <p>Pilihan Pembayaran Melalui E-Wallet:</p>
-                    <ul>
-                        <li>Dana</li>
-                        <li>ShopeePay</li>
-                        <li>Gopay</li>
-                        <!-- Tambahkan bank-bank lainnya sesuai kebutuhan -->
-                    </ul>
-                </div>
-
-                <div id="otherOptions" class="hidden">
-                    <!-- Opsi Pembayaran Lainnya -->
-                    <ul>
-                        <li>MOHON MAAF SAAT INI BELUM TERSEDIA METODE LAIN !!</li>
-                    </ul>
-                    <!-- Isi dengan elemen-elemen pilihan pembayaran lainnya -->
-                </div>
-
-                <style>
-                    /* Gaya yang sama seperti sebelumnya */
-                </style>
-
-                <script>
-                    function showBankOptions() {
-                        document.getElementById('bankOptions').style.display = 'block';
-                        document.getElementById('ewalletOptions').style.display = 'none';
-                        document.getElementById('otherOptions').style.display = 'none';
-                    }
-
-                    function showEwalletOptions() {
-                        document.getElementById('bankOptions').style.display = 'none';
-                        document.getElementById('ewalletOptions').style.display = 'block';
-                        document.getElementById('otherOptions').style.display = 'none';
-                    }
-
-                    function showOtherOptions() {
-                        document.getElementById('bankOptions').style.display = 'none';
-                        document.getElementById('ewalletOptions').style.display = 'none';
-                        document.getElementById('otherOptions').style.display = 'block';
-                    }
-                </script>
-            </div>
-
-
-
-
-
-            <!-- <div class="checkout-actions">
-                <div class="total-price">Total: $49.98</div>
-                <button class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Proceed to Payment</button>
-            </div> -->
         </div>
     </div>
+
+    <script>
+        let jumlah = 0; // Jumlah produk awal
+        const hargaPerTiket = <?php echo $product['harga']; ?>; // Ambil harga per tiket dari PHP
+
+        function updateHarga() {
+            const hargaTotal = jumlah * hargaPerTiket;
+            document.getElementById('hargaTotal').textContent = hargaTotal;
+        }
+
+        function tambahJumlah() {
+            jumlah++;
+            document.getElementById('jumlahProduk').value = jumlah;
+            updateHarga();
+        }
+
+        function kurangiJumlah() {
+            if (jumlah > 1) {
+                jumlah--;
+                document.getElementById('jumlahProduk').value = jumlah;
+                updateHarga();
+            }
+        }
+    </script>
+
+    <script>
+        function showBankOptions() {
+            document.getElementById('bankOptions').style.display = 'block';
+            document.getElementById('ewalletOptions').style.display = 'none';
+            document.getElementById('otherOptions').style.display = 'none';
+        }
+
+        function showEwalletOptions() {
+            document.getElementById('bankOptions').style.display = 'none';
+            document.getElementById('ewalletOptions').style.display = 'block';
+            document.getElementById('otherOptions').style.display = 'none';
+        }
+
+        function showOtherOptions() {
+            document.getElementById('bankOptions').style.display = 'none';
+            document.getElementById('ewalletOptions').style.display = 'none';
+            document.getElementById('otherOptions').style.display = 'block';
+        }
+    </script>
 
     <script>
         // Add JavaScript to disable/enable fields based on checkbox state
