@@ -50,7 +50,7 @@ if (isset($_GET['event_id'])) {
                 include "../../components/navbar.php";
                 ?>
                 <div class="container mx-auto p-3">
-                    <div class="mt-2">
+                    <div class="mt-1">
                         <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
                     </div>
                     <div class="mt-4">
