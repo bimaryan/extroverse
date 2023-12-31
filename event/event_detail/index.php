@@ -45,7 +45,7 @@ if (isset($_GET['event_id'])) {
                 </style>
             </head>
 
-            <body class="bg-gray-100">
+            <body style="background: #CECECE;">
                 <?php
                 include "../../components/navbar.php";
                 ?>

@@ -29,7 +29,7 @@ $email = $_SESSION['email'];
     <title>Extroverse - Profil</title>
 </head>
 
-<body class="bg-gray-100">
+<body style="background: #CECECE;">
     <?php
     include "../components/navbar.php";
     ?>

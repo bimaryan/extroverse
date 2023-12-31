@@ -24,14 +24,17 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
     <title>Checkout</title>
 </head>
 
-<body>
-    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+<body style="background: #CECECE;">
+    <?php 
+        include "../../components/navbar.php";
+    ?>
+    <!-- <nav class="bg-white border-gray-200 dark:bg-gray-900">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="http://localhost/extroverse/" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="http://localhost/extroverse/logo/extroverse.png" class="h-8" alt="Logo" />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Extroverse</span>
-            </a>
-            <div class="flex items-center gap-3 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            </a> -->
+            <!-- <div class="flex items-center gap-3 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <a href="http://localhost/extroverse/search">
                     <div class="flex md:order-2">
                         <div class="relative hidden md:block">
@@ -48,14 +51,14 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                                 id="search" name="Mencari" placeholder="Cari event...">
                         </div>
                     </div>
-                </a>
-                <button type="button"
+                </a> -->
+                <!-- <button type="button"
                     class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                     data-dropdown-placement="bottom">
                     <span class="sr-only">Open user menu</span>
                     <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo">
-                </button>
+                </button> -->
                 <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                     id="user-dropdown">
@@ -332,18 +335,20 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                         </button>
                         <button onclick="SelectBank()" type="button"
                             class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                            BCA
+                            <img src="https://www.bca.co.id/-/media/Feature/Header/Header-Logo/logo-bca-white.svg?v=1" alt="Logo" style="width: 50px; height: 20px">
                         </button>
                         <button onclick="SelectBank()" type="button"
                             class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                            BNI
+                            <img src="https://www.bni.co.id/Portals/1/bni-logo-id.png" alt="Logo" style="width: 50px; height: 20px">
                         </button>
                         <button onclick="SelectBank()" type="button"
                             class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                            CIMB Niaga
+                            <img src="https://www.cimbniaga.co.id/content/dam/cimb/logo/Logo%20CIMB%20white.svg" alt="Logo" style="width: 50px; height: 20px">
                         </button>
                         <button onclick="SelectBank()" type="button"
-                            class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Danamon</button>
+                            class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                            <img src="https://www.danamon.co.id/-/media/ICON-DCWCOID/LOGO-HEADER/MUFG-endorsment-Line-01.png?h=65&iar=0&mh=65&w=260&hash=64373B7C628C5EEFED24BF2773C0DA41" alt="Logo" style="width: 75px; height: 20px">
+                        </button>
                         <!-- Tambahkan bank-bank lainnya sesuai kebutuhan -->
                     </div>
 
@@ -354,11 +359,17 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                         <b>Pilihan Pembayaran Melalui E-Wallet:</b>
                         <br>
                             <button onclick="SelectEwallet()" type="button"
-                                class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">DANA</button>
+                                class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                                <img src="https://a.m.dana.id/danaweb/v3/DANA-Logo-white.svg" alt="Logo" style="width: 65px; height: 20px">
+                            </button>
                             <button onclick="SelectEwallet()" type="button"
-                                class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">ShopeePay</button>
+                                class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                                <img src="https://shopeepay.co.id/src/pages/home/assets/images/2-shopeepay-rectangle-orange2.png" alt="Logo" style="width: 50px; height: 20px">
+                            </button>
                             <button onclick="SelectEwallet()" type="button"
-                                class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Gopay</button>
+                                class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                                <img src="https://gopay.co.id/_nuxt/img/site-logo.7064e6fv143.png" alt="Logo" style="width: 70px; height: 20px">
+                            </button>
                             <!-- Tambahkan bank-bank lainnya sesuai kebutuhan -->
                     </div>
 

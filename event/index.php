@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Ticketin Dong</title>
 </head>
 
-<body>
+<body style="background: #CECECE;">
     <!-- Bagian Buat Acara -->
     <div class="my-8">
         <h3 class="text-xl font-semibold mb-2">Buat Acara</h3>
