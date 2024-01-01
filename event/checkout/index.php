@@ -170,36 +170,14 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="bg-white rounded-lg p-4 shadow">
-                    <h2 class="text-2xl font-semibold text-center">Ticket Quantity</h2>
-                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-
-                    <p class="text-lg"><?php echo $product['nama_acara']; ?></p>
-
-                    <div class="flex justify-between items-center">
-                        <!-- Total Price on the left -->
-                        <h1 id="hargaTotal" style="font-weight: bold;"><?php echo $product['harga']; ?></h1>
-
-                        <!-- Quantity-related elements on the right -->
-                        <div class="flex items-center space-x-2">
-                            <!-- Minus Button -->
-                            <button onclick="kurangiJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">-</button>
-
-                            <!-- Quantity Input -->
-                            <input type="text" id="jumlahProduk" value="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center w-16" readonly />
-
-                            <!-- Plus Button -->
-                            <button onclick="tambahJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">+</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg p-4 shadow">
                     <h2 class="text-2xl font-semibold text-center">Payment Method</h2>
                     <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-
-                    <button onclick="showBankOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Bank
-                        Transfer</button>
-                    <button onclick="showEwalletOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">E-Wallet</button>
-                    <button onclick="showOtherOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Other</button>
+                    <div class="grid grid-cols-1 md:grid-cols-3 text-center gap-4">
+                        <button onclick="showBankOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Bank
+                            Transfer</button>
+                        <button onclick="showEwalletOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">E-Wallet</button>
+                        <button onclick="showOtherOptions()" type="button" class="metode-pembayaran text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Other</button>
+                    </div>
                     <hr class="h-px my-2 mb-4 bg-gray-200 border-0 dark:bg-gray-700" />
                     <div id="bankOptions" class="hidden">
                         <div class="grid grid-cols-2 gap-4">
@@ -275,6 +253,25 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                         </ul>
                         <!-- Isi dengan elemen-elemen pilihan pembayaran lainnya -->
                     </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h2 class="text-2xl font-semibold text-center">Payment Details</h2>
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
+                    <!-- Ticket Total -->
+                    <div class="flex justify-between my-2">
+                        <span class="font-semibold">Ticket Total:</span>
+                        <span>Rp <?php echo isset($event) ? number_format($event['harga'] * $selectedTicketQuantity, 2) : '0.00'; ?></span>
+                    </div>
+
+                    <!-- Total Payment -->
+                    <div class="flex justify-between my-2">
+                        <span class="font-semibold">Total Payment:</span>
+                        <span>Rp <?php echo isset($event) ? number_format($event['harga'] * $selectedTicketQuantity, 2) : '0.00'; ?></span>
+                    </div>
+
+                    <!-- Pay Now Button -->
+                    <button class="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mt-4 w-full" type="button" onclick="payNow()">Pay Now</button>
                 </div>
             </div>
         </div>
