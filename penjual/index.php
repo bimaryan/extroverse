@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full h-20 bg-purple-900 shadow border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start rtl:justify-end">
@@ -106,8 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </svg>
                     </button>
                     <a href="./" class="flex ms-2 md:me-24">
-                        <img src="http://localhost/extroverse/logo/extroverse.png" class="h-8 me-3" alt="Extroverse" />
-                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Extroverse</span>
+                        <img src="http://localhost/extroverse/logo/pt.png" class="h-8 me-3" alt="Extroverse" style="width: 50px; height: max-content;"/>
+                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white" style="color: white;">Extroverse</span>
                     </a>
                 </div>
                 <div class="flex items-center">
