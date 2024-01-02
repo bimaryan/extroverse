@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <!-- <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start rtl:justify-end">
@@ -144,8 +144,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </div>
-    </nav> -->
-    <!-- <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+    </nav>
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul class="space-y-2 font-medium">
                 <li>
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </li>
             </ul>
         </div>
-    </aside> -->
+    </aside>
     <div class="p-4 sm:ml-64">
         <div class="rounded-lg mt-14">
             <div class="bg-white rounded-lg shadow p-6 mt-4" id="dashboard">
@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
-            <div style="" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
+            <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambahkan Acara</h2>
                 <form method="POST" action="" enctype="multipart/form-data">
                     <div class="mb-4">
