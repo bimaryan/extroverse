@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type', '$order_id')";
 
             if (mysqli_query($koneksi, $query)) {
-                header("Location: ../../midtrans/examples/snap/checkout-process-simple-version.php?order_id=$order_id");
+                header("Location: ./");
                 exit();
             } else {
                 echo "Terjadi kesalahan saat membuat acara: " . mysqli_error($koneksi);
