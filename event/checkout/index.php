@@ -170,6 +170,29 @@ $products = mysqli_fetch_all($query, MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="bg-white rounded-lg p-4 shadow">
+                    <h2 class="text-2xl font-semibold text-center">Ticket Quantity</h2>
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
+                    <p class="text-lg"><?php echo $product['nama_acara']; ?></p>
+
+                    <div class="flex justify-between items-center">
+                        <!-- Total Price on the left -->
+                        <h1 id="hargaTotal" style="font-weight: bold;"><?php echo $product['harga']; ?></h1>
+
+                        <!-- Quantity-related elements on the right -->
+                        <div class="flex items-center space-x-2">
+                            <!-- Minus Button -->
+                            <button onclick="kurangiJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">-</button>
+
+                            <!-- Quantity Input -->
+                            <input type="text" id="jumlahProduk" value="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center w-16" readonly />
+
+                            <!-- Plus Button -->
+                            <button onclick="tambahJumlah()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
                     <h2 class="text-2xl font-semibold text-center">Payment Method</h2>
                     <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
                     <div class="grid grid-cols-1 md:grid-cols-3 text-center gap-4">
