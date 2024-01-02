@@ -77,7 +77,7 @@ try {
 } catch (\Exception $e) {
     echo $e->getMessage();
 }
-echo "snapToken = " . $snap_token;
+// echo "snapToken = " . $snap_token;
 
 function printExampleWarningMessage()
 {
@@ -94,7 +94,7 @@ function printExampleWarningMessage()
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -108,20 +108,47 @@ function printExampleWarningMessage()
     <title>Extroverse - Checkout</title>
 </head>
 
-<body>
-    <div class="container mx-auto p-3">
-        <div class="card p-4 mt-4">
-            <h2 class="text-2xl font-semibold">Payment Details</h2>
-            <hr class="h-px mt-2 mb-4 bg-gray-200 border-0 dark:bg-gray-700" />
+<body style="background: #CECECE;">
 
-            <button id="pay-button" class="btn bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 mt-4">
-                Pilih Metode Pembayaran
-            </button>
+    <?php
+    include "../../components/navbar.php";
+    ?>
+
+    <div class="container mx-auto p-3">
+        <div class="mt-1">
+            <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                <i class="bi bi-arrow-left-circle"></i> Back
+            </a>
+        </div>
+        <div class="mt-4">
+            <div class="bg-white rounded-lg shadow p-4 mt-4 w-full">
+                <h2 class="text-2xl font-semibold"><?php echo $event['nama_acara']; ?></h2>
+            </div>
+            <div id="event" class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+                <div class="overflow-hidden mx-auto flex items-center justify-center">
+                    <img src="http://localhost/extroverse/img/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="rounded-lg">
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+                <div class="flex items-center justify-between">
+                    <span class="text"><?php echo $event['tiket_type']; ?></span>
+                    <button id="pay-button" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        Rp <?php echo number_format($event['harga'], 2); ?>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+                <h3 class="text-2xl font-semibold mb-2">Description</h3>
+                <hr class="h-px mb-2 bg-gray-200 border-0 dark:bg-gray-700" />
+                <p><?php echo nl2br($event['deskripsi']); ?></p>
+            </div>
         </div>
     </div>
+    <!-- TODO: Remove ".sandbox" from script src URL for the production environment. Also input your client key in "data-client-key" -->
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo Config::$clientKey; ?>"></script>
     <script type="text/javascript">
         document.getElementById('pay-button').onclick = function() {
+            // SnapToken acquired from the previous step
             snap.pay('<?php echo $snap_token ?>');
         };
     </script>

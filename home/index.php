@@ -44,7 +44,7 @@ $email = $_SESSION['email'];
                         while ($row_terbaru = mysqli_fetch_assoc($result_terbaru)) :
                         ?>
                             <div class="swiper-slide mr-4" style='width: 459px; height: auto; margin-right: 15px;'> <!-- Adjust the margin as needed -->
-                                <a href="../event/event_detail/?event_id=<?php echo $row_terbaru['event_id']; ?>">
+                                <a href="../event/event_detail/?order_id=<?php echo $row_terbaru['order_id']; ?>">
                                     <div class="relative overflow-hidden">
                                         <div style="width: 1226px; height: 239px; justify-content: flex-end; align-items: center; display: inline-flex;">
                                             <div style="width: 1956px; align-self: stretch; position: relative;">
@@ -86,7 +86,7 @@ $email = $_SESSION['email'];
                         while ($row_top = mysqli_fetch_assoc($result_top_page)) :
                         ?>
                             <div class="w-full bg-white border rounded-lg p-4">
-                                <a href="../event/event_detail/?event_id=<?php echo $row_top['event_id']; ?>">
+                                <a href="../event/event_detail/?order_id=<?php echo $row_terbaru['order_id']; ?>">
                                     <div class="relative">
                                         <div class="w-full h-64 overflow-hidden mb-5">
                                             <img src="<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full rounded-lg">
