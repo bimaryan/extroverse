@@ -1,4 +1,4 @@
-<nav class="bg-white border-gray-200 dark:bg-gray-900">
+<nav class="bg-purple-900 border-gray-200 dark:bg-gray-900">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="http://localhost/extroverse/" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="http://localhost/extroverse/logo/extroverse.png" alt="Logo" style="width: 80px;" />
