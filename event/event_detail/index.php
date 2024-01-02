@@ -65,7 +65,7 @@ if (isset($_GET['event_id'])) {
                         <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
                             <div class="flex items-center justify-between">
                                 <span class="text"><?php echo $event['tiket_type']; ?></span>
-                                <a href="../../event/checkout/" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Rp <?php echo number_format($event['harga'], 2); ?></a>
+                                <button onclick="submitMidtransForm()" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Rp <?php echo number_format($event['harga'], 2); ?></button>
                             </div>
                         </div>
                         <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
@@ -77,47 +77,6 @@ if (isset($_GET['event_id'])) {
                 </div>
 
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                <script>
-                    const profileButton = document.getElementById("profileButton");
-                    const profilePopup = document.getElementById("profilePopup");
-
-                    profileButton.addEventListener("click", () => {
-                        profilePopup.classList.toggle("hidden");
-                    });
-
-                    // Sembunyikan pop-up saat mengklik di luar pop-up
-                    window.addEventListener("click", (e) => {
-                        if (!profileButton.contains(e.target) && !profilePopup.contains(e.target)) {
-                            profilePopup.classList.add("hidden");
-                        }
-                    });
-                </script>
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const shareButton = document.getElementById('shareButton');
-                        const eventLink = window.location.href; // Mendapatkan URL halaman acara
-
-                        shareButton.addEventListener('click', function() {
-                            // Salin link ke clipboard
-                            const tempInput = document.createElement('input');
-                            tempInput.value = eventLink;
-                            document.body.appendChild(tempInput);
-                            tempInput.select();
-                            document.execCommand('copy');
-                            document.body.removeChild(tempInput);
-
-                            // Tampilkan SweetAlert untuk memberi tahu pengguna bahwa link telah disalin
-                            Swal.fire({
-                                title: 'Link Telah Disalin',
-                                text: 'Link ke acara ini telah disalin ke clipboard.',
-                                icon: 'success',
-                                timer: 2000, // Durasi SweetAlert (ms)
-                                showConfirmButton: false
-                            });
-                        });
-                    });
-                </script>
             </body>
 
             </html>
