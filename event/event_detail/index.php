@@ -11,6 +11,7 @@ if (!isset($_SESSION["user_id"])) {
 // Periksa apakah event_id tersedia dalam parameter URL
 if (isset($_GET['event_id'])) {
     $event_id = $_GET['event_id'];
+    $order_id = rand();
 
     // Query untuk mengambil detail event berdasarkan event_id
     $query = "SELECT * FROM events WHERE event_id = $event_id";
@@ -65,7 +66,7 @@ if (isset($_GET['event_id'])) {
                         <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
                             <div class="flex items-center justify-between">
                                 <span class="text"><?php echo $event['tiket_type']; ?></span>
-                                <button id="checkoutButton" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Rp <?php echo number_format($event['harga'], 2); ?></button>
+                                <a href="../checkout/checkout.php?order_id=<?php echo $order_id; ?>" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Rp <?php echo number_format($event['harga'], 2); ?></a>
                             </div>
                         </div>
                         <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
@@ -77,12 +78,6 @@ if (isset($_GET['event_id'])) {
                 </div>
 
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                <script src="https://app.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-NTHAxm4kbd8HpKUk"></script>
-                <script>
-                    document.getElementById('checkoutButton').addEventListener('click', function() {
-                        snap.pay('SB-Mid-server-6Xe5piGR5BPlDXlHcWBFN01H');
-                    });
-                </script>
             </body>
 
             </html>

@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lokasi = mysqli_real_escape_string($koneksi, $_POST["lokasi"]);
     $jumlah_tiket_terjual = 0;
     $tiket_type = mysqli_real_escape_string($koneksi, $_POST["tiket_type"]);
+    $order_id = rand();
 
     $user_id = $_SESSION["user_id"];
 
@@ -62,11 +63,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Move the file to the target directory
         if (move_uploaded_file($_FILES["cover_foto"]["tmp_name"], $target_file)) {
-            $query = "INSERT INTO events (user_id, nama_acara, deskripsi, tanggal, harga, jumlah_tiket, lokasi, jumlah_tiket_terjual, cover_foto, tiket_type)
-                VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type')";
+            $query = "INSERT INTO events (user_id, nama_acara, deskripsi, tanggal, harga, jumlah_tiket, lokasi, jumlah_tiket_terjual, cover_foto, tiket_type, order_id)
+                VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type', '$order_id')";
 
             if (mysqli_query($koneksi, $query)) {
-                header("Location: ./");
+                header("Location: ../../midtrans/examples/snap/checkout-process-simple-version.php?order_id=$order_id");
                 exit();
             } else {
                 echo "Terjadi kesalahan saat membuat acara: " . mysqli_error($koneksi);
