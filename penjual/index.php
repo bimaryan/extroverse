@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Extroverse - Penjual</title>
 </head>
 
-<body>
+<body style="background: #CECECE;">
     <nav class="fixed top-0 z-50 w-full h-20 bg-purple-900 shadow border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
