@@ -5,6 +5,7 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "penjual") {
     header("Location: http://localhost/extroverse/auth/login");
     exit();
 }
+
 require_once "../db.php";
 
 $user_id = $_SESSION['user_id'];
@@ -15,53 +16,54 @@ $email = $_SESSION['email'];
 $query_logo = mysqli_query($koneksi, "SELECT profile_image FROM users WHERE user_id = '$user_id'");
 
 $data_user = mysqli_fetch_assoc($query_logo);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama_acara = $_POST["nama_acara"];
-    $deskripsi = $_POST["deskripsi"];
-    $tanggal = $_POST["tanggal"];
-    $harga = $_POST["harga"];
-    $jumlah_tiket = $_POST["jumlah_tiket"];
-    $lokasi = $_POST["lokasi"];
+    // Sanitize and validate user inputs
+    $nama_acara = mysqli_real_escape_string($koneksi, $_POST["nama_acara"]);
+    $deskripsi = mysqli_real_escape_string($koneksi, $_POST["deskripsi"]);
+    $tanggal = mysqli_real_escape_string($koneksi, $_POST["tanggal"]);
+    $harga = intval($_POST["harga"]);
+    $jumlah_tiket = intval($_POST["jumlah_tiket"]);
+    $lokasi = mysqli_real_escape_string($koneksi, $_POST["lokasi"]);
     $jumlah_tiket_terjual = 0;
-    $tiket_type = $_POST["tiket_type"];
+    $tiket_type = mysqli_real_escape_string($koneksi, $_POST["tiket_type"]);
 
     $user_id = $_SESSION["user_id"];
 
+    // File upload handling
     $target_directory = "../img/";
     $target_file = $target_directory . basename($_FILES["cover_foto"]["name"]);
-    $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $uploadOk = 1;
 
-    if (isset($_POST["submit"])) {
-        $check = getimagesize($_FILES["cover_foto"]["tmp_name"]);
-        if ($check !== false) {
-            $uploadOk = 1;
-        } else {
-            $uploadOk = 0;
-        }
-    }
-
-    if (file_exists($target_file)) {
-        echo "Maaf, file tersebut sudah ada.";
+    // Check if file is a valid image
+    $check = getimagesize($_FILES["cover_foto"]["tmp_name"]);
+    if ($check === false) {
         $uploadOk = 0;
+        echo "Maaf, file tersebut bukan gambar.";
     }
 
+    // Check file size
     if ($_FILES["cover_foto"]["size"] > 5000000) {
+        $uploadOk = 0;
         echo "Maaf, ukuran file terlalu besar.";
-        $uploadOk = 0;
     }
 
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+    // Allow only certain file formats
+    $allowed_formats = ["jpg", "jpeg", "png", "gif"];
+    if (!in_array($imageFileType, $allowed_formats)) {
+        $uploadOk = 0;
         echo "Maaf, hanya file JPG, JPEG, PNG, dan GIF yang diizinkan.";
-        $uploadOk = 0;
     }
 
+    // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
         echo "Maaf, file Anda tidak dapat diunggah.";
     } else {
+        // Move the file to the target directory
         if (move_uploaded_file($_FILES["cover_foto"]["tmp_name"], $target_file)) {
             $query = "INSERT INTO events (user_id, nama_acara, deskripsi, tanggal, harga, jumlah_tiket, lokasi, jumlah_tiket_terjual, cover_foto, tiket_type)
-VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type')";
+                VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type')";
 
             if (mysqli_query($koneksi, $query)) {
                 header("Location: ./");
@@ -73,6 +75,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
             echo "Maaf, terjadi kesalahan saat mengunggah file.";
         }
     }
+
     mysqli_close($koneksi);
 }
 ?>
@@ -92,7 +95,7 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
 </head>
 
 <body>
-    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <!-- <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start rtl:justify-end">
@@ -141,8 +144,8 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                 </div>
             </div>
         </div>
-    </nav>
-    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+    </nav> -->
+    <!-- <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul class="space-y-2 font-medium">
                 <li>
@@ -179,24 +182,24 @@ VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tik
                 </li>
             </ul>
         </div>
-    </aside>
+    </aside> -->
     <div class="p-4 sm:ml-64">
         <div class="rounded-lg mt-14">
             <div class="bg-white rounded-lg shadow p-6 mt-4" id="dashboard">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
                 <div class="text-center grid grid-cols-3 gap-4">
                     <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
-                        
+
                     </div>
                     <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
-                        
+
                     </div>
                     <div class="p-4 rounded bg-blue-500 dark:bg-gray-800">
-                        
+
                     </div>
                 </div>
             </div>
-            <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
+            <div style="" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambahkan Acara</h2>
                 <form method="POST" action="" enctype="multipart/form-data">
                     <div class="mb-4">
