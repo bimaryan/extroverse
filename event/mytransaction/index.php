@@ -19,13 +19,13 @@
     session_start();
     require_once '../../components/navbar.php';
     ?>
-    <div class="container mx-auto p-">
+    <div class="container mx-auto p-2">
         <div id="transaksiCard" class="bg-white rounded-lg shadow p-6 mb-4">
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Transaction History</h2>
             <div class="overflow-x-auto">
                 <table class="table w-full whitespace-no-wrap">
                     <thead>
-                        <tr class='text-center text-m'>
+                        <tr class='text-center text-sm'>
                             <th data-field="id">NO</th>
                             <th data-field="order_id">ORDER ID</th>
                             <th data-field="name">NAMA PEMBELI</th>
@@ -62,11 +62,11 @@
                             // echo "<td>" . $data['transaction_status'] . "</td>";
 
                             if ($status >= 2) {
-                                echo "<td><b> Pembayaran Sukses</b></span></td>";
+                                echo "<td class='text-green-500'>Sukses</td>";
                             } elseif ($status >= 1) {
-                                echo "<td><b> Pembayaran Panding</b></span></td>";
+                                echo "<td class='text-yellow-500'>Panding</td>";
                             } else {
-                                echo "<td><b> Pembayaran Belum Dilakukan</b></span></td>";
+                                echo "<td class='text-gray-300'>Waiting</td>";
                             }
                         }
                         ?>
