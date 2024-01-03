@@ -1,12 +1,12 @@
 <?php
 session_start();
+require '../db.php';
 
+// Redirect if the user is not logged in or not a seller
 if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "penjual") {
     header("Location: http://localhost/extroverse/auth/login");
     exit();
 }
-
-require_once "../db.php";
 
 $user_id = $_SESSION['user_id'];
 $role = $_SESSION["role"];
@@ -14,25 +14,26 @@ $username = $_SESSION["username"];
 $email = $_SESSION['email'];
 
 $query_logo = mysqli_query($koneksi, "SELECT profile_image FROM users WHERE user_id = '$user_id'");
-
 $data_user = mysqli_fetch_assoc($query_logo);
 
-// Fungsi untuk mendapatkan total uang masuk dari database
-function getTotalIncome($koneksi, $user_id) {
+// Function to get total income for a user
+function getTotalIncome($koneksi, $user_id)
+{
     $query_income = mysqli_query($koneksi, "SELECT SUM(total_uang_masuk) AS total_income FROM events WHERE user_id = '$user_id'");
     $data_income = mysqli_fetch_assoc($query_income);
     return $data_income['total_income'];
 }
 
-// Fungsi untuk mendapatkan total jumlah tiket terjual dari database
-function getTotalTicketsSold($koneksi, $user_id) {
+// Function to get total tickets sold for a user
+function getTotalTicketsSold($koneksi, $user_id)
+{
     $query_tickets = mysqli_query($koneksi, "SELECT SUM(jumlah_tiket_terjual) AS total_tickets_sold FROM events WHERE user_id = '$user_id'");
     $data_tickets = mysqli_fetch_assoc($query_tickets);
     return $data_tickets['total_tickets_sold'];
 }
 
+// Process form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize and validate user inputs
     $nama_acara = mysqli_real_escape_string($koneksi, $_POST["nama_acara"]);
     $deskripsi = mysqli_real_escape_string($koneksi, $_POST["deskripsi"]);
     $tanggal = mysqli_real_escape_string($koneksi, $_POST["tanggal"]);
@@ -41,24 +42,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lokasi = mysqli_real_escape_string($koneksi, $_POST["lokasi"]);
     $jumlah_tiket_terjual = 0;
     $tiket_type = mysqli_real_escape_string($koneksi, $_POST["tiket_type"]);
-    $order_id = rand();
 
-    $user_id = $_SESSION["user_id"];
-
-    // File upload handling
+    // Image upload handling
     $target_directory = "../img/";
     $target_file = $target_directory . basename($_FILES["cover_foto"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
     $uploadOk = 1;
 
-    // Check if file is a valid image
     $check = getimagesize($_FILES["cover_foto"]["tmp_name"]);
     if ($check === false) {
         $uploadOk = 0;
         echo "Maaf, file tersebut bukan gambar.";
     }
 
-    // Check file size
     if ($_FILES["cover_foto"]["size"] > 5000000) {
         $uploadOk = 0;
         echo "Maaf, ukuran file terlalu besar.";
@@ -71,14 +67,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Maaf, hanya file JPG, JPEG, PNG, dan GIF yang diizinkan.";
     }
 
-    // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
         echo "Maaf, file Anda tidak dapat diunggah.";
     } else {
-        // Move the file to the target directory
         if (move_uploaded_file($_FILES["cover_foto"]["tmp_name"], $target_file)) {
-            $query = "INSERT INTO events (user_id, nama_acara, deskripsi, tanggal, harga, jumlah_tiket, lokasi, jumlah_tiket_terjual, cover_foto, tiket_type, order_id)
-                VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type', '$order_id')";
+            // SQL query to insert data into events table
+            $query = "INSERT INTO events (user_id, nama_acara, deskripsi, tanggal, harga, jumlah_tiket, lokasi, jumlah_tiket_terjual, cover_foto, tiket_type)
+                VALUES ('$user_id', '$nama_acara', '$deskripsi', '$tanggal', $harga, $jumlah_tiket, '$lokasi', $jumlah_tiket_terjual, '$target_file', '$tiket_type')";
 
             if (mysqli_query($koneksi, $query)) {
                 header("Location: ./");
@@ -90,13 +85,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Maaf, terjadi kesalahan saat mengunggah file.";
         }
     }
-    
+
     $totalIncome = getTotalIncome($koneksi, $user_id);
     $totalTicketsSold = getTotalTicketsSold($koneksi, $user_id);
 
     mysqli_close($koneksi);
 }
+
+// HTTP response code
+http_response_code(200);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -109,69 +108,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Extroverse - Penjual</title>
 </head>
 
-<body style="background: #CECECE;">
-    <nav
-        class="fixed top-0 z-50 w-full h-20 bg-purple-900 shadow border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<body class="bg-gray-300">
+    <nav class="fixed top-0 z-50 w-full h-20 bg-purple-900 shadow border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start rtl:justify-end">
-                    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
-                        aria-controls="logo-sidebar" type="button"
-                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                         <span class="sr-only">Open sidebar</span>
-                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" fill-rule="evenodd"
-                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
                             </path>
                         </svg>
                     </button>
                     <a href="./" class="flex ms-2 md:me-24">
-                        <img src="http://localhost/extroverse/logo/pt.png" class="h-8 me-3" alt="Extroverse"
-                            style="width: 50px; height: max-content;" />
-                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-                            style="color: white;">Extroverse</span>
+                        <img src="http://localhost/extroverse/logo/pt.png" alt="Extroverse" style="width: 50px;" />
+                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white" style="color: white;">Extroverse</span>
                     </a>
                 </div>
                 <div class="flex items-center">
                     <div class="flex items-center ms-3">
                         <div>
-                            <button type="button"
-                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                 <span class="sr-only">Open user menu</span>
-                                <img class="w-8 h-8 rounded-full" src="<?php echo $data_user['profile_image'] ?>"
-                                    alt="user photo">
+                                <img class="w-8 h-8 rounded-full" src="<?php echo $data_user['profile_image'] ?>" alt="user photo">
                             </button>
                         </div>
-                        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-                            id="dropdown-user">
-                            <div class="px-4 py-3" role="none">
-                                <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    <?php echo $username; ?>
-                                </p>
-                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                    <?php echo $email; ?>
-                                </p>
-                            </div>
-                            <hr class="bg-gray-200 border-1 dark:bg-gray-700" />
+                        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                             <ul class="py-1" role="none">
                                 <li>
-                                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                                        role="menuitem" onclick="showCard('profile')">Account</a>
+                                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer" role="menuitem" onclick="showCard('profile')">Account</a>
                                 </li>
                                 <li>
-                                    <a href="../daftar_distributor/"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Register Distributor</a>
+                                    <a href="../daftar_distributor/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Register Distributor</a>
                                 </li>
                                 <li>
-                                    <a href="http://localhost/extroverse/auth/logout.php"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Sign out</a>
+                                    <a href="http://localhost/extroverse/auth/logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
                                 </li>
                             </ul>
                         </div>
@@ -180,55 +155,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </nav>
-    <aside id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Sidebar">
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul class="space-y-2 font-medium">
                 <li>
-                    <a style="cursor:pointer;"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onclick="showCard('dashboard')">
+                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('dashboard')">
                         <span class="ms-3"><i class="bi bi-house-door"></i> Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a style="cursor:pointer;"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onclick="showCard('addCard')">
+                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('addCard')">
                         <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-plus-square"></i> Tambah
                             Acara</span>
                     </a>
                 </li>
                 <li>
-                    <a style="cursor:pointer;"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onclick="showCard('messageCard')">
-
-                        <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-chat-dots"></i> Pesan</span>
-                        <span
-                            class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
-                    </a>
-                </li>
-                <li>
-                    <a style="cursor:pointer;"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onclick="showCard('customerCard')">
-                        <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-people"></i> Pelanggan</span>
-                    </a>
-                </li>
-                <li>
-                    <a style="cursor:pointer;"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onclick="showCard('eventCard')">
+                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('eventCard')">
                         <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-calendar4-event"></i> Acara</span>
                     </a>
                 </li>
                 <li>
-                    <a style="cursor:pointer;"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onclick="showCard('dataCard')">
-                        <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-graph-up"></i> Rekapan Data</span>
+                    <a style="cursor:pointer;" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onclick="showCard('transaksiCard')">
+                        <span class="flex-1 ms-3 whitespace-nowrap"><i class="bi bi-graph-up"></i> Transaksi</span>
                     </a>
                 </li>
             </ul>
@@ -236,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </aside>
     <div class="p-4 sm:ml-64">
         <div class="rounded-lg mt-14">
-            <div class="bg-white rounded-lg shadow p-6 mt-4" id="dashboard">
+            <div class="bg-white rounded-lg shadow p-6 mt-5" id="dashboard">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
                 <div class="text-center grid grid-cols-2 gap-4">
                     <div class="p-4 rounded bg-purple-900 font-bold dark:bg-gray-800" style="color: white;">
@@ -246,48 +194,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <p>Jumlah Tiket Terjual: <?php echo $totalTicketsSold; ?></p>
                     </div>
                 </div>
-
-
             </div>
-            <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-4">
+            <div style="display: none;" id="addCard" class="bg-white rounded-lg shadow p-6 mt-5">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambahkan Acara</h2>
                 <form method="POST" action="" enctype="multipart/form-data">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="cover_foto">Cover Foto
                             Event</label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="cover_foto" type="file" name="cover_foto" accept="image/*" required>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cover_foto" type="file" name="cover_foto" accept="image/*" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_acara">Nama Acara</label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="nama_acara" type="text" name="nama_acara" required>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama_acara" type="text" name="nama_acara" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">Deskripsi</label>
-                        <textarea
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="deskripsi" name="deskripsi" style="resize: none;" required></textarea>
+                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="deskripsi" name="deskripsi" style="resize: none;" required></textarea>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="tanggal">Tanggal</label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="tanggal" type="date" name="tanggal" required>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tanggal" type="date" name="tanggal" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">Harga</label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="harga" type="number" name="harga" required>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="harga" type="number" name="harga" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="tiket_type">Tiket Type</label>
-                        <select
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="tiket_type" name="tiket_type" required>
+                        <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tiket_type" name="tiket_type" required>
                             <option value="Presale 1">Presale 1</option>
                             <option value="Presale 2">Presale 2</option>
                             <option value="Presale 3">Presale 3</option>
@@ -296,86 +230,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="jumlah_tiket">Jumlah
                             Tiket</label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="jumlah_tiket" type="number" name="jumlah_tiket" required>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_tiket" type="number" name="jumlah_tiket" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="lokasi">Lokasi</label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="lokasi" type="text" name="lokasi" required>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lokasi" type="text" name="lokasi" required>
                     </div>
                     <div class="mb-4">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full"
-                            type="submit">Buat Acara</button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full" type="submit">Buat Acara</button>
                     </div>
                 </form>
             </div>
-            <div style="display: none;" id="messageCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Pesan</h2>
-                COMING SOON
-            </div>
-            <div style="display: none;" id="customerCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Pelanggan</h2>
-                COMING SOON
-            </div>
-            <div style="display: none;" id="eventCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
+            <div style="display: none;" id="eventCard" class="bg-white rounded-lg shadow p-6 mt-5 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">List Daftar Acara</h2>
                 <div class="relative overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Cover Foto
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Nama Acara
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Deskripsi
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Tanggal
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Harga
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Jumlah Tiket
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Lokasi
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Tiket Terjual
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="text-center">
                                         Tiket Type
                                     </div>
@@ -410,24 +322,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <!-- Main modal -->
-                <div id="default-modal" tabindex="-1" aria-hidden="true"
-                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-2xl max-h-full">
                         <!-- Modal content -->
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                             <!-- Modal header -->
-                            <div
-                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                                     Edit Event
                                 </h3>
-                                <button type="button"
-                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-hide="default-modal">
-                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 14 14">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                     </svg>
                                     <span class="sr-only">Close modal</span>
                                 </button>
@@ -439,71 +345,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="">
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="cover_foto">Cover
                                             Foto Event</label>
-                                        <input
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="cover_foto" type="file" name="cover_foto" accept="image/*" required>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cover_foto" type="file" name="cover_foto" accept="image/*" required>
                                     </div>
                                     <div class="">
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_acara">Nama
                                             Acara</label>
-                                        <input
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="nama_acara" type="text" name="nama_acara" required>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama_acara" type="text" name="nama_acara" required>
                                     </div>
                                     <div class="">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2"
-                                            for="deskripsi">Deskripsi</label>
-                                        <textarea
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="deskripsi" name="deskripsi" style="resize: none;" required></textarea>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">Deskripsi</label>
+                                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="deskripsi" name="deskripsi" style="resize: none;" required></textarea>
                                     </div>
                                     <div class="">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2"
-                                            for="tanggal">Tanggal</label>
-                                        <input
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="tanggal" type="date" name="tanggal" required>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="tanggal">Tanggal</label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tanggal" type="date" name="tanggal" required>
                                     </div>
                                     <div class="">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2"
-                                            for="harga">Harga</label>
-                                        <input
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="harga" type="number" name="harga" required>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">Harga</label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="harga" type="number" name="harga" required>
                                     </div>
                                     <div class="">
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="tiket_type">Tiket
                                             Type</label>
-                                        <select
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="tiket_type" name="tiket_type" required>
+                                        <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tiket_type" name="tiket_type" required>
                                             <option value="Presale 1">Presale 1</option>
                                             <option value="Presale 2">Presale 2</option>
                                             <option value="Presale 3">Presale 3</option>
                                         </select>
                                     </div>
                                     <div class="">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2"
-                                            for="jumlah_tiket">Jumlah Tiket</label>
-                                        <input
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="jumlah_tiket" type="number" name="jumlah_tiket" required>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="jumlah_tiket">Jumlah Tiket</label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_tiket" type="number" name="jumlah_tiket" required>
                                     </div>
                                     <div class="">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2"
-                                            for="lokasi">Lokasi</label>
-                                        <input
-                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="lokasi" type="text" name="lokasi" required>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="lokasi">Lokasi</label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lokasi" type="text" name="lokasi" required>
                                     </div>
                                     <!-- Modal footer -->
-                                    <div
-                                        class="flex items-center border-t border-gray-200 rounded-b dark:border-gray-600">
-                                        <button data-modal-hide="default-modal"
-                                            class="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                            type="submit">Simpan</button>
-                                        <button data-modal-hide="default-modal" type="button"
-                                            class="mt-4 ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Batal</button>
+                                    <div class="flex items-center border-t border-gray-200 rounded-b dark:border-gray-600">
+                                        <button data-modal-hide="default-modal" class="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Simpan</button>
+                                        <button data-modal-hide="default-modal" type="button" class="mt-4 ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Batal</button>
                                     </div>
                                 </form>
                             </div>
@@ -511,15 +392,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
-            <div style="display: none;" id="dataCard" class="bg-white rounded-lg shadow p-6 mt-4 mb-4">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Rekapan Data</h2>
-                COMING SOON
-            </div>
             <div class="bg-white rounded-lg shadow p-6 mt-4" style="display: none;" id="profile">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Profil Penjual</h2>
                 <div class="flex items-center">
-                    <img class="w-16 h-16 rounded-full" src="<?php echo $data_user['profile_image'] ?>"
-                        alt="user photo">
+                    <img class="w-16 h-16 rounded-full" src="<?php echo $data_user['profile_image'] ?>" alt="user photo">
                     <div class="ms-4">
                         <p class="text-lg font-semibold text-gray-900 dark:text-white"><?php echo $username; ?></p>
                         <p class="text-sm text-gray-500 dark:text-gray-300"><?php echo $email; ?></p>
@@ -527,42 +403,128 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
+            <div style="display: none;" id="transaksiCard" class="bg-white rounded-lg shadow p-6 mt-5 mb-4">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">DATA PEMBAYARAN</h2>
+                <div class="overflow-x-auto">
+                    <table class="table w-full whitespace-no-wrap">
+                        <thead>
+                            <tr class='text-center'>
+                                <th data-field="id">NO</th>
+                                <th data-field="order_id">ORDER ID</th>
+                                <th data-field="name">NAMA PEMBELI</th>
+                                <th data-field="nama_acara">NAMA ACARA</th>
+                                <th data-field="nominal">NOMINAL PEMBAYARAN</th>
+                                <th data-field="status">STATUS</th>
+                                <th data-field="hapus">HAPUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            include "../db.php";
+                            // error_reporting(0);
+
+                            $query = mysqli_query($koneksi, "SELECT registrasi_tiket.*, events.nama_acara, events.harga
+                            FROM registrasi_tiket
+                            JOIN events ON registrasi_tiket.event_id = events.event_id
+                            ORDER BY registrasi_tiket.id ASC");
+
+                            if (!$query) {
+                                die("Query failed: " . mysqli_error($koneksi));
+                            }
+
+                            $no = 1;
+
+                            while ($data = mysqli_fetch_array($query)) {
+                                $status = $data['transaction_status'];
+
+                                echo "<tr class='text-center'>";
+                                echo "<td>" . $no++ . "</td>";
+                                echo "<td>" . $data['order_id'] . "</td>";
+                                echo "<td>" . $data['nama'] . "</td>";
+                                echo "<td>" . $data['nama_acara'] . "</td>";
+                                echo "<td>" . $data['harga'] . "</td>";
+                                // echo "<td>" . $data['transaction_status'] . "</td>";
+
+                                if ($status >= 2) {
+                                    echo "<td><b> Pembayaran Sukses</b></span></td>";
+                                } elseif ($status >= 1) {
+                                    echo "<td><b> Pembayaran Panding</b></span></td>";
+                                } else {
+                                    echo "<td><b> Pembayaran Belum Dilakukan</b></span></td>";
+                                }
+
+                                echo "<td>
+                                        <button class='btn btn-danger delete-btn' data-id='" . $data['id'] . "'>
+                                            <i class='bi bi-trash-fill'></i> HAPUS
+                                        </button>
+                                    </td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <script>
-    document.getElementById('cover_photo').addEventListener('change', function() {
-        const fileInput = this;
-        const maxSizeMB = 5;
-        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+        // Add a click event listener to all delete buttons
+        document.querySelectorAll('.delete-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
 
-        if (fileInput.files.length > 0) {
-            const fileSizeBytes = fileInput.files[0].size;
-
-            if (fileSizeBytes > maxSizeBytes) {
-                alert('File size exceeds the maximum allowed size (5MB). Please choose a smaller file.');
-                fileInput.value = '';
-            }
-        }
-    });
+                // Display a confirmation dialog using SweetAlert
+                Swal.fire({
+                    title: 'Apakah Anda yakin ingin menghapus data ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to the delete script/page with the record ID
+                        window.location.href = 'hapus.php?id=' + id;
+                    }
+                });
+            });
+        });
     </script>
     <script>
-    function hideAllCards() {
-        var cards = ['eventCard', 'addCard', 'messageCard', 'customerCard', 'dataCard', 'profile', 'dashboard'];
-        cards.forEach(function(cardId) {
-            var card = document.getElementById(cardId);
-            if (card) {
-                card.style.display = 'none';
+        document.getElementById('cover_photo').addEventListener('change', function() {
+            const fileInput = this;
+            const maxSizeMB = 5;
+            const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+            if (fileInput.files.length > 0) {
+                const fileSizeBytes = fileInput.files[0].size;
+
+                if (fileSizeBytes > maxSizeBytes) {
+                    alert('File size exceeds the maximum allowed size (5MB). Please choose a smaller file.');
+                    fileInput.value = '';
+                }
             }
         });
-    }
-
-    function showCard(cardId) {
-        hideAllCards();
-        var card = document.getElementById(cardId);
-        if (card) {
-            card.style.display = 'block';
+    </script>
+    <script>
+        function hideAllCards() {
+            var cards = ['eventCard', 'addCard', 'messageCard', 'customerCard', 'dataCard', 'profile', 'dashboard', 'transaksiCard'];
+            cards.forEach(function(cardId) {
+                var card = document.getElementById(cardId);
+                if (card) {
+                    card.style.display = 'none';
+                }
+            });
         }
-    }
+
+        function showCard(cardId) {
+            hideAllCards();
+            var card = document.getElementById(cardId);
+            if (card) {
+                card.style.display = 'block';
+            }
+        }
     </script>
 
 </body>

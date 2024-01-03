@@ -1,100 +1,62 @@
 <?php
+session_start();
+require '../../db.php';
 
-namespace Midtrans;
+if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "pengguna") {
+    header("Location: ../../auth/login/");
+    exit();
+}
 
-require_once dirname(__FILE__) . '../../../midtrans/Midtrans.php';
-// Set Your server key
-// can find in Merchant Portal -> Settings -> Access keys
-Config::$serverKey = 'SB-Mid-server-6Xe5piGR5BPlDXlHcWBFN01H';
-Config::$clientKey = 'SB-Mid-client-NTHAxm4kbd8HpKUk';
+$nama_acara = $harga = "";
 
-// non-relevant function only used for demo/example purpose
-printExampleWarningMessage();
+// Check if event_id is provided
+if (isset($_GET['event_id'])) {
+    $event_id = mysqli_real_escape_string($koneksi, $_GET['event_id']);
 
-// Uncomment for production environment
-// Config::$isProduction = true;
-Config::$isSanitized = Config::$is3ds = true;
-$order_id = $_GET['order_id'];
+    // Fetch event information
+    $event_query = mysqli_query($koneksi, "SELECT nama_acara, harga, cover_foto, tanggal, lokasi FROM events WHERE event_id = '$event_id'");
+    $event_data = mysqli_fetch_assoc($event_query);
 
-// Required
-$transaction_details = array(
-    'order_id' => $order_id,
-    'gross_amount' => 94000, // no decimal allowed for creditcard
-);
+    // Set values for display
+    $nama_acara = $event_data['nama_acara'];
+    $harga = $event_data['harga'];
+    $cover_foto_url = $event_data['cover_foto'];
+    $tanggal = $event_data['tanggal'];
+    $lokasi = $event_data['lokasi'];
+}
 
-// Fetch data from the database based on the order_id
-require_once '../../db.php';
-$query = "SELECT * FROM events WHERE order_id = '$order_id'";
-$result = mysqli_query($koneksi, $query);
+// Process form data
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = mysqli_real_escape_string($koneksi, $_POST["nama"]);
+    $email = mysqli_real_escape_string($koneksi, $_POST["email"]);
+    $day = mysqli_real_escape_string($koneksi, $_POST["day"]);
+    $month = mysqli_real_escape_string($koneksi, $_POST["month"]);
+    $year = mysqli_real_escape_string($koneksi, $_POST["year"]);
+    $tanggal_lahir = "$year-$month-$day";
+    $gender = mysqli_real_escape_string($koneksi, $_POST["gender"]);
+    $order_id = uniqid(); // Using uniqid() for a more unique order_id
+    $transaction_status = 1;
+    $transaction_id = "";
 
-if ($result) {
-    $event = mysqli_fetch_assoc($result);
+    $event_id = mysqli_real_escape_string($koneksi, $_POST["event_id"]);
 
-    // Construct item_details array using data from events table
-    $item_details = array(
-        array(
-            'id' => $event['event_id'], // Assuming event_id is unique
-            'price' => $event['harga'],
-            'quantity' => 1,
-            'name' => $event['nama_acara']
-        ),
-    );
+    // SQL query to insert data into registrasi_tiket table
+    $sql = "INSERT INTO registrasi_tiket (nama, email, tanggal_lahir, gender, order_id, event_id, transaction_status, transaction_id)
+            VALUES ('$nama', '$email', '$tanggal_lahir', '$gender', '$order_id', '$event_id', '$transaction_status', '$transaction_id')";
 
-    // Fetch customer details from the users table based on user_id
-    $user_id = $event['user_id'];
-    $customer_query = "SELECT * FROM users WHERE user_id = $user_id";
-    $customer_result = mysqli_query($koneksi, $customer_query);
-
-    if ($customer_result) {
-        $customer = mysqli_fetch_assoc($customer_result);
-
-        // Optional: Customize customer details based on your actual user table structure
-        $customer_details = array(
-            'first_name' => $customer['username'],
-            'last_name' => '', // Adjust accordingly based on your user table structure
-            'email' => $customer['email'],
-            'phone' => $customer['phone'],
-        );
+    if ($koneksi->query($sql) === TRUE) {
+        header("location:../checkout/payment/?event_id=$event_id&order_id=$order_id");
+        exit();
     } else {
-        // Handle error fetching customer details
-        echo "Error fetching customer details from the database.";
-    }
-} else {
-    // Handle database query error
-    echo "Error fetching data from the database.";
-}
-
-// Fill transaction details
-$transaction = array(
-    'transaction_details' => $transaction_details,
-    'customer_details' => $customer_details,
-    'item_details' => $item_details,
-);
-
-$snap_token = '';
-try {
-    $snap_token = Snap::getSnapToken($transaction);
-} catch (\Exception $e) {
-    echo $e->getMessage();
-}
-// echo "snapToken = " . $snap_token;
-
-function printExampleWarningMessage()
-{
-    if (strpos(Config::$serverKey, 'your ') != false) {
-        echo "<code>";
-        echo "<h4>Please set your server key from sandbox</h4>";
-        echo "In file: " . __FILE__;
-        echo "<br>";
-        echo "<br>";
-        echo htmlspecialchars('Config::$serverKey = \'<your server key>\';');
-        die();
+        echo "Error: " . $sql . "<br>" . $koneksi->error;
     }
 }
+
+$koneksi->close();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -102,56 +64,72 @@ function printExampleWarningMessage()
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://kit.fontawesome.com/f74deb4653.js" crossorigin="anonymous"></script>
     <title>Extroverse - Checkout</title>
 </head>
 
 <body style="background: #CECECE;">
-
     <?php
     include "../../components/navbar.php";
     ?>
-
-    <div class="container mx-auto p-3">
-        <div class="mt-1">
-            <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                <i class="bi bi-arrow-left-circle"></i> Back
-            </a>
-        </div>
-        <div class="mt-4">
-            <div class="bg-white rounded-lg shadow p-4 mt-4 w-full">
-                <h2 class="text-2xl font-semibold"><?php echo $event['nama_acara']; ?></h2>
-            </div>
-            <div id="event" class="bg-white rounded-lg shadow p-4 mt-2 w-full">
-                <div class="overflow-hidden mx-auto flex items-center justify-center">
-                    <img src="http://localhost/extroverse/img/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="rounded-lg">
+    <div class="container p-4 mx-auto mt-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
+            <div class="card p-5 bg-white rounded-lg shadow">
+                <h2 class="text-2xl font-semibold mb-4 text-center">Event Details</h2>
+                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+                <img src="http://localhost/extroverse/img/<?php echo $cover_foto_url; ?>" class="w-full" alt="Event Cover Photo">
+                <div class="m-2">
+                    <p class="font-semibold"><?php echo $nama_acara; ?></p>
+                    <p class="text-gray-500 text-sm"><i class="bi bi-alarm"></i> <?php echo $tanggal; ?></p>
+                    <p class="text-gray-500 text-sm"><i class="bi bi-geo-alt"></i> <?php echo $lokasi; ?></p>
                 </div>
             </div>
-            <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
-                <div class="flex items-center justify-between">
-                    <span class="text"><?php echo $event['tiket_type']; ?></span>
-                    <button id="pay-button" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        Rp <?php echo number_format($event['harga'], 2); ?>
+            <div class="card p-5 bg-white rounded-lg shadow">
+                <h2 class="text-2xl font-semibold mb-4 text-center">Registrasi Tiket</h2>
+                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+                <form method="post">
+                    <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label for="nama" class="block text-sm font-medium text-gray-700">Nama:</label>
+                            <input type="text" name="nama" class="mt-1 p-2 w-full border rounded-md">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+                            <input type="email" name="email" class="mt-1 p-2 w-full border rounded-md">
+                        </div>
+                    </div>
+                    <label for="nama" class="block mt-4 text-sm font-medium text-gray-700">Harga:</label>
+                    <input type="text" name="harga" value="<?php echo $harga; ?>" readonly class="mt-1 p-2 w-full border rounded-md bg-gray-100" disabled>
+                    <!-- Add three separate input fields for day, month, and year -->
+                    <label class="block mt-4 text-sm font-medium text-gray-700">Tanggal Lahir:</label>
+                    <div class="grid grid-cols-3 gap-2 mt-1">
+                        <div>
+                            <label for="day" class="sr-only">Day</label>
+                            <input type="number" name="day" id="day" class="p-2 w-full border rounded-md" placeholder="DD" required>
+                        </div>
+                        <div>
+                            <label for="month" class="sr-only">Month</label>
+                            <input type="number" name="month" id="month" class="p-2 w-full border rounded-md" placeholder="MM" required>
+                        </div>
+                        <div>
+                            <label for="year" class="sr-only">Year</label>
+                            <input type="number" name="year" id="year" class="p-2 w-full border rounded-md" placeholder="YYYY" required>
+                        </div>
+                    </div>
+                    <label for="gender" class="block mt-4 text-sm font-medium text-gray-700">Gender:</label>
+                    <select name="gender" class="mt-1 p-2 w-full border rounded-md">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+                        Submit
                     </button>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
-                <h3 class="text-2xl font-semibold mb-2">Description</h3>
-                <hr class="h-px mb-2 bg-gray-200 border-0 dark:bg-gray-700" />
-                <p><?php echo nl2br($event['deskripsi']); ?></p>
+                </form>
             </div>
         </div>
     </div>
-    <!-- TODO: Remove ".sandbox" from script src URL for the production environment. Also input your client key in "data-client-key" -->
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo Config::$clientKey; ?>"></script>
-    <script type="text/javascript">
-        document.getElementById('pay-button').onclick = function() {
-            // SnapToken acquired from the previous step
-            snap.pay('<?php echo $snap_token ?>');
-        };
-    </script>
 </body>
 
 </html>
