@@ -405,10 +405,10 @@ http_response_code(200);
             </div>
             <div style="display: none;" id="transaksiCard" class="bg-white rounded-lg shadow p-6 mt-5 mb-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">DATA PEMBAYARAN</h2>
-                <div class="overflow-x-auto">
-                    <table class="table w-full whitespace-no-wrap">
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead>
-                            <tr class='text-center'>
+                            <tr class='text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
                                 <th data-field="id">NO</th>
                                 <th data-field="order_id">ORDER ID</th>
                                 <th data-field="name">NAMA PEMBELI</th>
@@ -455,7 +455,7 @@ http_response_code(200);
 
                                 echo "<td>
                                         <button class='btn btn-danger delete-btn' data-id='" . $data['id'] . "'>
-                                            <i class='bi bi-trash-fill'></i> HAPUS
+                                            <i class='bi bi-trash-fill'></i>
                                         </button>
                                     </td>";
                                 echo "</tr>";

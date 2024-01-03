@@ -85,19 +85,6 @@ try {
 } catch (\Exception $e) {
     die($e->getMessage());
 }
-
-function printExampleWarningMessage()
-{
-    if (strpos(Config::$serverKey, 'your ') !== false) {
-        echo "<code>";
-        echo "<h4>Please set your server key from sandbox</h4>";
-        echo "In file: " . __FILE__;
-        echo "<br>";
-        echo "<br>";
-        echo htmlspecialchars('Config::$serverKey = \'<your server key>\';');
-        die();
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -112,22 +99,75 @@ function printExampleWarningMessage()
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
 <title>Extroverse - Payment</title>
 
-<body class='bg-gray-300'>
+<body class='dark:bg-gray-900'>
     <?php
     require '../../../components/navbar.php';
     ?>
     <div class="container mx-auto p-4">
-        <div class="card p-5 bg-white rounded-lg shadow">
+        <div class="card p-5 dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow">
             <p>Registrasi Tiket Berhasil. Silahkan selesaikan pembayaran anda!</p>
             <button id="pay-button" type="button" class="w-full mt-3 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Bayar Sekarang</button>
         </div>
     </div>
     <!-- TODO: Remove ".sandbox" from script src URL for the production environment. Also input your client key in "data-client-key" -->
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo Config::$clientKey; ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/whatsapp-web.js@1.12.3"></script>
+    <!-- <script type="text/javascript">
+        document.getElementById('pay-button').onclick = function() {
+            // SnapToken acquired from the previous step
+            snap.pay('<?php echo $snap_token ?>');
+        };
+    </script> -->
     <script type="text/javascript">
         document.getElementById('pay-button').onclick = function() {
             // SnapToken acquired from the previous step
             snap.pay('<?php echo $snap_token ?>');
+
+            // Send a WhatsApp message
+            const phoneNumber = '';
+            const message = 'Thank you for registering! Your ticket details: ...'; // Customize this message
+
+            const {
+                Client
+            } = require('whatsapp-web.js');
+            const client = new Client();
+
+            client.on('qr', (qr) => {
+                // Display QR code to scan
+                console.log('QR Code:', qr);
+            });
+
+            client.on('authenticated', (session) => {
+                console.log('Authenticated');
+                // Save session information for reusing the session
+            });
+
+            client.on('ready', () => {
+                console.log('Client is ready!');
+                sendMessage();
+            });
+
+            client.on('message', (message) => {
+                // Handle incoming messages (if needed)
+            });
+
+            client.on('disconnected', (reason) => {
+                console.log('Client was disconnected:', reason);
+            });
+
+            client.initialize();
+
+            async function sendMessage() {
+                try {
+                    const chat = await client.sendMessage(`${phoneNumber}@c.us`, message);
+                    console.log('Message sent:', chat);
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                } finally {
+                    // Close the client after sending the message
+                    await client.logout();
+                }
+            }
         };
     </script>
 </body>

@@ -34,7 +34,7 @@ if ($result) {
     <title>Extroverse - Eventdetail</title>
 </head>
 
-<body style="background: #CECECE;">
+<body class="dark:bg-gray-900">
 
     <?php
     include "../../components/navbar.php";
@@ -47,15 +47,15 @@ if ($result) {
             </a>
         </div>
         <div class="mt-4">
-            <div class="bg-white rounded-lg shadow p-4 mt-4 w-full">
+            <div class="dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg shadow p-4 mt-4 w-full">
                 <h2 class="text-2xl font-semibold"><?php echo $event['nama_acara']; ?></h2>
             </div>
-            <div id="event" class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+            <div id="event" class="dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg shadow p-4 mt-2 w-full">
                 <div class="overflow-hidden mx-auto flex items-center justify-center">
                     <img src="http://localhost/extroverse/img/<?php echo $event['cover_foto']; ?>" alt="Cover Event" class="rounded-lg">
                 </div>
             </div>
-            <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+            <div class="dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg shadow p-4 mt-2 w-full">
                 <div class="flex items-center justify-between">
                     <span class="text"><?php echo $event['tiket_type']; ?></span>
                     <a href="../checkout/?event_id=<?php echo $event['event_id']; ?>" class="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
@@ -63,7 +63,7 @@ if ($result) {
                     </a>
                 </div>
             </div>
-            <div class="bg-white rounded-lg shadow p-4 mt-2 w-full">
+            <div class="dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg shadow p-4 mt-2 w-full">
                 <h3 class="text-2xl font-semibold mb-2">Description</h3>
                 <hr class="h-px mb-2 bg-gray-200 border-0 dark:bg-gray-700" />
                 <p><?php echo nl2br($event['deskripsi']); ?></p>

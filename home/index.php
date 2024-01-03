@@ -26,7 +26,7 @@ session_start();
     <title>Extroverse - Home</title>
 </head>
 
-<body class="bg-gray-300">
+<body class="dark:bg-gray-900">
     <?php
     include "../components/navbar.php";
     ?>
@@ -61,7 +61,7 @@ session_start();
             </div>
 
             <div class="mb-4">
-                <h3 class="text-xl font-semibold mb-2">Event Terpopuler</h3>
+                <h3 class="text-xl font-semibold mb-2 font-normal text-gray-700 dark:text-gray-400">Event Terpopuler</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                     <?php
                     $query_top = "SELECT * FROM events ORDER BY jumlah_tiket_terjual DESC";
@@ -82,19 +82,19 @@ session_start();
 
                     while ($row_top = mysqli_fetch_assoc($result_top_page)) :
                     ?>
-                        <div class="w-full bg-white border rounded-lg p-4">
+                        <div class="w-full max-w-m p-4 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700">
                             <a href="../event/event_detail/?event_id=<?php echo $row_top['event_id']; ?>">
                                 <div class="relative">
                                     <div class="w-full h-64 overflow-hidden mb-5">
                                         <img src="<?php echo $row_top['cover_foto']; ?>" alt="Cover Event" class="w-full h-full rounded-lg">
                                     </div>
-                                    <p class="mb-2 absolute top-2 right-2 bg-white p-2 rounded font-semibold text-lg"><?php echo $row_top['tanggal']; ?></p>
+                                    <p class="mb-2 absolute top-2 right-2 bg-white dark:bg-gray-600 dark:text-white p-2 rounded font-semibold text-lg"><?php echo $row_top['tanggal']; ?></p>
                                 </div>
-                                <h4 class="text-lg font-semibold mb-2"><?php echo $row_top['nama_acara']; ?></h4>
-                                <p class="text-sm mb-2 text-gray-500 mt-6 mb-4"><?php echo nl2br($row_top['lokasi']); ?></p>
-                                <p class="text-sm mb-2 text-gray-500">Tiket Terjual: <?php echo $row_top['jumlah_tiket_terjual']; ?></p>
+                                <h4 class="text-lg font-semibold font-normal text-gray-700 dark:text-gray-300 mb-2"><?php echo $row_top['nama_acara']; ?></h4>
+                                <p class="text-sm mb-2 font-normal text-gray-700 dark:text-gray-300 mt-6 mb-4"><?php echo nl2br($row_top['lokasi']); ?></p>
+                                <p class="text-sm mb-2 font-normal text-gray-700 dark:text-gray-300">Tiket Terjual: <?php echo $row_top['jumlah_tiket_terjual']; ?></p>
                                 <hr />
-                                <div class="flex justify-between items-center mt-5 text-gray-500">
+                                <div class="flex justify-between items-center mt-5 font-normal text-gray-700 dark:text-gray-300">
                                     <p class="mb-2">Start From</p>
                                     <p class="mb-2 text-yellow-500 font-semibold">Rp <?php echo number_format($row_top['harga'], 2); ?></p>
                                 </div>

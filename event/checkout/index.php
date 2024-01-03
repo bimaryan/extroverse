@@ -69,13 +69,13 @@ $koneksi->close();
     <title>Extroverse - Checkout</title>
 </head>
 
-<body style="background: #CECECE;">
+<body class="dark:bg-gray-900 text-gray-700 dark:text-gray-300">
     <?php
     include "../../components/navbar.php";
     ?>
     <div class="container p-4 mx-auto mt-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
-            <div class="card p-5 bg-white rounded-lg shadow">
+            <div class="card p-5 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg shadow">
                 <h2 class="text-2xl font-semibold mb-4 text-center">Event Details</h2>
                 <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
                 <img src="http://localhost/extroverse/img/<?php echo $cover_foto_url; ?>" class="w-full" alt="Event Cover Photo">
@@ -85,45 +85,45 @@ $koneksi->close();
                     <p class="text-gray-500 text-sm"><i class="bi bi-geo-alt"></i> <?php echo $lokasi; ?></p>
                 </div>
             </div>
-            <div class="card p-5 bg-white rounded-lg shadow">
+            <div class="card p-5 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg shadow">
                 <h2 class="text-2xl font-semibold mb-4 text-center">Registrasi Tiket</h2>
                 <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
                 <form method="post">
                     <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label for="nama" class="block text-sm font-medium text-gray-700">Nama:</label>
-                            <input type="text" name="nama" class="mt-1 p-2 w-full border rounded-md">
+                            <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama:</label>
+                            <input type="text" name="nama" class="mt-1 p-2 w-full text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-                            <input type="email" name="email" class="mt-1 p-2 w-full border rounded-md">
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email:</label>
+                            <input type="email" name="email" class="mt-1 p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                     </div>
-                    <label for="nama" class="block mt-4 text-sm font-medium text-gray-700">Harga:</label>
-                    <input type="text" name="harga" value="<?php echo $harga; ?>" readonly class="mt-1 p-2 w-full border rounded-md bg-gray-100" disabled>
+                    <label for="nama" class="block mt-4 text-sm font-medium dark:text-gray-300">Harga:</label>
+                    <input type="text" name="harga" value="<?php echo $harga; ?>" readonly class="mt-1 p-2 w-full border rounded-mdborder border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                     <!-- Add three separate input fields for day, month, and year -->
-                    <label class="block mt-4 text-sm font-medium text-gray-700">Tanggal Lahir:</label>
+                    <label class="block mt-4 text-sm font-medium dark:text-gray-300">Tanggal Lahir:</label>
                     <div class="grid grid-cols-3 gap-2 mt-1">
                         <div>
-                            <label for="day" class="sr-only">Day</label>
-                            <input type="number" name="day" id="day" class="p-2 w-full border rounded-md" placeholder="DD" required>
+                            <label for="day" class="sr-only dark:text-gray-300">Day</label>
+                            <input type="number" name="day" id="day" class="p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="DD" required>
                         </div>
                         <div>
-                            <label for="month" class="sr-only">Month</label>
-                            <input type="number" name="month" id="month" class="p-2 w-full border rounded-md" placeholder="MM" required>
+                            <label for="month" class="sr-only dark:text-gray-300">Month</label>
+                            <input type="number" name="month" id="month" class="p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="MM" required>
                         </div>
                         <div>
-                            <label for="year" class="sr-only">Year</label>
-                            <input type="number" name="year" id="year" class="p-2 w-full border rounded-md" placeholder="YYYY" required>
+                            <label for="year" class="sr-only dark:text-gray-300">Year</label>
+                            <input type="number" name="year" id="year" class="p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="YYYY" required>
                         </div>
                     </div>
-                    <label for="gender" class="block mt-4 text-sm font-medium text-gray-700">Gender:</label>
-                    <select name="gender" class="mt-1 p-2 w-full border rounded-md">
+                    <label for="gender" class="block mt-4 text-sm font-medium dark:text-gray-300">Gender:</label>
+                    <select name="gender" class="mt-1 p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
-                    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+                    <button type="submit" class="mt-4 px-4 py-2 w-full bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
                         Submit
                     </button>
                 </form>

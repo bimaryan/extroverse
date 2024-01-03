@@ -34,9 +34,9 @@ if ($transaction == 'settlement') {
 } else if ($transaction == 'deny') {
     mysqli_query($koneksi, "UPDATE registrasi_tiket SET transaction_status='3', transaction_id='$transaction_id' WHERE order_id='$order_id'");
 } else if ($transaction == 'expire') {
-    mysqli_query($koneksi, "UPDATE registrasi_tiket SET transaction_status='3', transaction_id='$transaction_id' WHERE order_id='$order_id'");
+    mysqli_query($koneksi, "UPDATE registrasi_tiket SET transaction_status='5', transaction_id='$transaction_id' WHERE order_id='$order_id'");
 } else if ($transaction == 'cancel') {
-    mysqli_query($koneksi, "UPDATE registrasi_tiket SET transaction_status='3', transaction_id='$transaction_id' WHERE order_id='$order_id'");
+    mysqli_query($koneksi, "UPDATE registrasi_tiket SET transaction_status='4', transaction_id='$transaction_id' WHERE order_id='$order_id'");
 }
 
 

@@ -29,7 +29,7 @@ $email = $_SESSION['email'];
     <title>Extroverse - Profil</title>
 </head>
 
-<body class="bg-gray-300">
+<body class="dark:bg-gray-900">
     <?php
     include "../components/navbar.php";
     ?>
@@ -37,8 +37,8 @@ $email = $_SESSION['email'];
         <div class="mt-2 mb-4">
             <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
         </div>
-        <div class="bg-white rounded-lg shadow p-6 mt-4" id="profile">
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Profil Penjual</h2>
+        <div class="dark:bg-gray-800 rounded-lg shadow p-6 mt-4" id="profile">
+            <h2 class="mb-4 text-xl font-bold text-gray-700 dark:text-gray-300 dark:text-white">Profil Penjual</h2>
             <div class="flex items-center">
                 <img class="w-16 h-16 rounded-full" src="<?php echo $data_user['profile_image'] ?>" alt="user photo">
                 <div class="ms-4">

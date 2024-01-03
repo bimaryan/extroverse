@@ -14,17 +14,20 @@
     <title>Extroverse - Mytransaction</title>
 </head>
 
-<body>
+<body class='dark:bg-gray-900'>
     <?php
     session_start();
     require_once '../../components/navbar.php';
     ?>
-    <div class="container mx-auto p-2">
-        <div id="transaksiCard" class="bg-white rounded-lg shadow p-6 mb-4">
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Transaction History</h2>
-            <div class="overflow-x-auto">
-                <table class="table w-full whitespace-no-wrap">
-                    <thead>
+    <div class="container mx-auto p-3">
+        <div class="mt-2 mb-4">
+            <a href="http://localhost/extroverse/" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"><i class="bi bi-arrow-left-circle"></i> Back</a>
+        </div>
+        <div id="transaksiCard" class="dark:bg-gray-800 mt-4 rounded-lg shadow p-6 mb-4">
+            <h2 class="mb-4 text-xl font-bold dark:text-gray-300">Transaction History</h2>
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right dark:text-gray-300">
+                    <thead class='class="text-xs uppercase dark:text-gray-800"'>
                         <tr class='text-center text-sm'>
                             <th data-field="id">NO</th>
                             <th data-field="order_id">ORDER ID</th>
@@ -53,7 +56,7 @@
                         while ($data = mysqli_fetch_array($query)) {
                             $status = $data['transaction_status'];
 
-                            echo "<tr class='text-center text-sm'>";
+                            echo "<tr class='text-center text-sm dark:text-gray-500'>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td>" . $data['order_id'] . "</td>";
                             echo "<td>" . $data['nama'] . "</td>";
@@ -62,11 +65,15 @@
                             // echo "<td>" . $data['transaction_status'] . "</td>";
 
                             if ($status >= 2) {
-                                echo "<td class='text-green-500'>Sukses</td>";
+                                echo "<td class='text-green-500 font-bold'>Sukses</td>";
                             } elseif ($status >= 1) {
-                                echo "<td class='text-yellow-500'>Panding</td>";
+                                echo "<td class='text-yellow-500 font-bold'>Panding</td>";
+                            } elseif ($status >= 4) {
+                                echo "<td class='text-red-500 font-bold'>Cancel</td>";
+                            } elseif ($status >= 5) {
+                                echo "<td class='text-red-900 font-bold'>Expire</td>";
                             } else {
-                                echo "<td class='text-gray-300'>Waiting</td>";
+                                echo "<td class='text-gray-300 font-bold'>Waiting</td>";
                             }
                         }
                         ?>
