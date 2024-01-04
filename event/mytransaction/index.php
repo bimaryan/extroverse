@@ -35,6 +35,7 @@
                             <th data-field="nama_acara">NAMA ACARA</th>
                             <th data-field="nominal">NOMINAL PEMBAYARAN</th>
                             <th data-field="status">STATUS</th>
+                            <th data-field="status">BAYAR</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,6 +77,11 @@
                                 echo "<td class='text-gray-300 font-bold'>Waiting</td>";
                             }
                         }
+                        echo '<td class="px-6 py-4">';
+                        if ($status < 2) {
+                            echo '<a href="../checkout/payment/?event_id=' . $data['event_id'] . '&order_id=' . $data['order_id'] . '" class="inline-block px-4 py-2 leading-5 text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">Bayar</a>';
+                        }
+                        echo '</td>';
                         ?>
                     </tbody>
                 </table>
