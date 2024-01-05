@@ -53,8 +53,9 @@
                         }
 
                         $no = 1;
+                        $data = mysqli_fetch_array($query);
 
-                        while ($data = mysqli_fetch_array($query)) {
+                        while ($data) {
                             $status = $data['transaction_status'];
 
                             echo "<tr class='text-center text-sm dark:text-gray-500'>";
@@ -63,7 +64,6 @@
                             echo "<td>" . $data['nama'] . "</td>";
                             echo "<td>" . $data['nama_acara'] . "</td>";
                             echo "<td>" . $data['harga'] . "</td>";
-                            // echo "<td>" . $data['transaction_status'] . "</td>";
 
                             if ($status >= 2) {
                                 echo "<td class='text-green-500 font-bold'>Sukses</td>";
@@ -76,12 +76,21 @@
                             } else {
                                 echo "<td class='text-gray-300 font-bold'>Waiting</td>";
                             }
+
+                            echo '<td class="px-6 py-4">';
+                            if ($status < 2) {
+                                echo '<a href="../checkout/payment/?event_id=' . $data['event_id'] . '&order_id=' . $data['order_id'] . '" class="inline-block px-4 py-2 leading-5 text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">Bayar</a>';
+                            }
+                            echo '</td>';
+                            echo "</tr>";
+
+                            $data = mysqli_fetch_array($query);
                         }
-                        echo '<td class="px-6 py-4">';
-                        if ($status < 2) {
-                            echo '<a href="../checkout/payment/?event_id=' . $data['event_id'] . '&order_id=' . $data['order_id'] . '" class="inline-block px-4 py-2 leading-5 text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">Bayar</a>';
+
+                        // Check if there are no more rows
+                        if ($no == 1) {
+                            echo "<tr><td colspan='7' class='text-center'>No transactions found.</td></tr>";
                         }
-                        echo '</td>';
                         ?>
                     </tbody>
                 </table>
