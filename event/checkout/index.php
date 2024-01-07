@@ -27,6 +27,8 @@ if (isset($_GET['event_id'])) {
 
 // Process form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_id = $_SESSION["user_id"]; // Get user_id from the session
+
     $nama = mysqli_real_escape_string($koneksi, $_POST["nama"]);
     $email = mysqli_real_escape_string($koneksi, $_POST["email"]);
     $day = mysqli_real_escape_string($koneksi, $_POST["day"]);
@@ -34,15 +36,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $year = mysqli_real_escape_string($koneksi, $_POST["year"]);
     $tanggal_lahir = "$year-$month-$day";
     $gender = mysqli_real_escape_string($koneksi, $_POST["gender"]);
-    $order_id = uniqid(); // Using uniqid() for a more unique order_id
+
+    // Generate a unique order_id using user_id and timestamp
+    $order_id = rand();
+
     $transaction_status = 1;
     $transaction_id = "";
 
     $event_id = mysqli_real_escape_string($koneksi, $_POST["event_id"]);
 
     // SQL query to insert data into registrasi_tiket table
-    $sql = "INSERT INTO registrasi_tiket (nama, email, tanggal_lahir, gender, order_id, event_id, transaction_status, transaction_id)
-            VALUES ('$nama', '$email', '$tanggal_lahir', '$gender', '$order_id', '$event_id', '$transaction_status', '$transaction_id')";
+    $sql = "INSERT INTO registrasi_tiket (user_id, nama, email, tanggal_lahir, gender, order_id, event_id, transaction_status, transaction_id)
+            VALUES ('$user_id', '$nama', '$email', '$tanggal_lahir', '$gender', '$order_id', '$event_id', '$transaction_status', '$transaction_id')";
 
     if ($koneksi->query($sql) === TRUE) {
         header("location:../checkout/payment/?event_id=$event_id&order_id=$order_id");

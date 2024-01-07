@@ -1,3 +1,10 @@
+<?php
+if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "pengguna") {
+    header("Location: ../../auth/login/");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,8 +34,8 @@
             <h2 class="mb-4 text-xl font-bold dark:text-gray-300">Transaction History</h2>
             <div class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right dark:text-gray-300">
-                    <thead class='class="text-xs uppercase dark:text-gray-800"'>
-                        <tr class='text-center text-sm'>
+                    <thead class="text-xs uppercase dark:text-white">
+                        <tr class="text-center text-sm">
                             <th data-field="id">NO</th>
                             <th data-field="order_id">ORDER ID</th>
                             <th data-field="name">NAMA PEMBELI</th>
@@ -41,11 +48,14 @@
                     <tbody>
                         <?php
                         include "../../db.php";
-                        // error_reporting(0);
+
+                        // Assuming you have a user_id stored in the session
+                        $user_id = $_SESSION['user_id'];
 
                         $query = mysqli_query($koneksi, "SELECT registrasi_tiket.*, events.nama_acara, events.harga
                             FROM registrasi_tiket
                             JOIN events ON registrasi_tiket.event_id = events.event_id
+                            WHERE registrasi_tiket.user_id = $user_id
                             ORDER BY registrasi_tiket.id ASC");
 
                         if (!$query) {
@@ -53,9 +63,8 @@
                         }
 
                         $no = 1;
-                        $data = mysqli_fetch_array($query);
 
-                        while ($data) {
+                        while ($data = mysqli_fetch_array($query)) {
                             $status = $data['transaction_status'];
 
                             echo "<tr class='text-center text-sm dark:text-gray-500'>";
@@ -83,8 +92,6 @@
                             }
                             echo '</td>';
                             echo "</tr>";
-
-                            $data = mysqli_fetch_array($query);
                         }
 
                         // Check if there are no more rows
