@@ -1,5 +1,4 @@
 <?php
-
 require_once(dirname(__FILE__) . '../../../../midtrans/Midtrans.php');
 session_start();
 
@@ -41,10 +40,6 @@ if (!$result) {
 $event = mysqli_fetch_assoc($result);
 
 $biaya = $event['harga'];
-$transaction_details = array(
-    'order_id' => $order_id, // Use event_id as the order_id
-    'gross_amount' => $biaya, // no decimal allowed for credit card
-);
 
 // Construct item_details array using data from events table
 $item_details = array(
@@ -70,7 +65,6 @@ $customer = mysqli_fetch_assoc($result);
 // Fill transaction details
 $transaction_details = array(
     'order_id' => $order_id,
-    'event_id' => '<?php echo $event_id; ?>',
     'gross_amount' => $event['harga'], // Make sure this is a valid numeric value
 );
 

@@ -7,24 +7,38 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "pengguna") {
     exit();
 }
 
+function getUserData($userId, $koneksi)
+{
+    $userQuery = mysqli_query($koneksi, "SELECT * FROM users WHERE user_id = '$userId'");
+    return mysqli_fetch_assoc($userQuery);
+}
+
+function getRegistrasiData($userId, $koneksi)
+{
+    $registrasiQuery = mysqli_query($koneksi, "SELECT * FROM registrasi_tiket WHERE user_id = '$userId'");
+    return mysqli_fetch_assoc($registrasiQuery);
+}
+
+function getEventData($eventId, $koneksi)
+{
+    $eventQuery = mysqli_query($koneksi, "SELECT * FROM events WHERE event_id = '$eventId'");
+    return mysqli_fetch_assoc($eventQuery);
+}
+
 // Assuming you have a session and a user ID
-// You can modify this based on your authentication mechanism
 $user_id = $_SESSION["user_id"];
 
 // Fetch user data
-$user_query = mysqli_query($koneksi, "SELECT * FROM users WHERE user_id = '$user_id'");
-$user_data = mysqli_fetch_assoc($user_query);
+$user_data = getUserData($user_id, $koneksi);
 
 // Fetch registrasi_tiket data for the user
-$registrasi_query = mysqli_query($koneksi, "SELECT * FROM registrasi_tiket WHERE user_id = '$user_id'");
-$registrasi_data = mysqli_fetch_assoc($registrasi_query);
+$registrasi_data = getRegistrasiData($user_id, $koneksi);
 
 // Assuming you have an event ID from somewhere
 $event_id = $registrasi_data['event_id'];
 
 // Fetch event data
-$event_query = mysqli_query($koneksi, "SELECT * FROM events WHERE event_id = '$event_id'");
-$event_data = mysqli_fetch_assoc($event_query);
+$event_data = getEventData($event_id, $koneksi);
 
 // Get order ID
 $order_id = $registrasi_data['order_id'];
@@ -79,7 +93,7 @@ $order_id = $registrasi_data['order_id'];
     <script>
         // Generate QR code using qrcode.js
         var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: "<?php echo $order_id; ?>", 
+            text: "<?php echo $order_id; ?>",
             width: 128,
             height: 128
         });
