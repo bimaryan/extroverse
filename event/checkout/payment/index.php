@@ -43,7 +43,7 @@ $event = mysqli_fetch_assoc($result);
 $biaya = $event['harga'];
 $transaction_details = array(
     'order_id' => $order_id, // Use event_id as the order_id
-    'gross_amount' =>  $biaya, // no decimal allowed for credit card
+    'gross_amount' => $biaya, // no decimal allowed for credit card
 );
 
 // Construct item_details array using data from events table
@@ -70,7 +70,8 @@ $customer = mysqli_fetch_assoc($result);
 // Fill transaction details
 $transaction_details = array(
     'order_id' => $order_id,
-    'gross_amount' =>  $event['harga'], // Make sure this is a valid numeric value
+    'event_id' => '<?php echo $event_id; ?>',
+    'gross_amount' => $event['harga'], // Make sure this is a valid numeric value
 );
 
 $transaction = array(
@@ -89,15 +90,18 @@ try {
 
 <!DOCTYPE html>
 <html>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
-<title>Extroverse - Payment</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unbounded">
+    <title>Extroverse - Payment</title>
+</head>
 
 <body class='dark:bg-gray-900'>
     <?php
@@ -106,68 +110,16 @@ try {
     <div class="container mx-auto p-4">
         <div class="card p-5 dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow">
             <p>Registrasi Tiket Berhasil. Silahkan selesaikan pembayaran anda!</p>
-            <button id="pay-button" type="button" class="w-full mt-3 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Bayar Sekarang</button>
+            <button id="pay-button" type="button" class="w-full mt-3 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Bayar
+                Sekarang</button>
         </div>
     </div>
     <!-- TODO: Remove ".sandbox" from script src URL for the production environment. Also input your client key in "data-client-key" -->
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo Config::$clientKey; ?>"></script>
-    <script src="https://cdn.jsdelivr.net/npm/whatsapp-web.js@1.12.3"></script>
-    <!-- <script type="text/javascript">
-        document.getElementById('pay-button').onclick = function() {
-            // SnapToken acquired from the previous step
-            snap.pay('<?php echo $snap_token ?>');
-        };
-    </script> -->
     <script type="text/javascript">
         document.getElementById('pay-button').onclick = function() {
             // SnapToken acquired from the previous step
             snap.pay('<?php echo $snap_token ?>');
-
-            // Send a WhatsApp message
-            const phoneNumber = '';
-            const message = 'Thank you for registering! Your ticket details: ...'; // Customize this message
-
-            const {
-                Client
-            } = require('whatsapp-web.js');
-            const client = new Client();
-
-            client.on('qr', (qr) => {
-                // Display QR code to scan
-                console.log('QR Code:', qr);
-            });
-
-            client.on('authenticated', (session) => {
-                console.log('Authenticated');
-                // Save session information for reusing the session
-            });
-
-            client.on('ready', () => {
-                console.log('Client is ready!');
-                sendMessage();
-            });
-
-            client.on('message', (message) => {
-                // Handle incoming messages (if needed)
-            });
-
-            client.on('disconnected', (reason) => {
-                console.log('Client was disconnected:', reason);
-            });
-
-            client.initialize();
-
-            async function sendMessage() {
-                try {
-                    const chat = await client.sendMessage(`${phoneNumber}@c.us`, message);
-                    console.log('Message sent:', chat);
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                } finally {
-                    // Close the client after sending the message
-                    await client.logout();
-                }
-            }
         };
     </script>
 </body>

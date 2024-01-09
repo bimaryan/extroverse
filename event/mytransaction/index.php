@@ -1,10 +1,3 @@
-<?php
-if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "pengguna") {
-    header("Location: ../../auth/login/");
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 

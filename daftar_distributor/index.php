@@ -77,7 +77,7 @@
             $sql = "INSERT INTO users (username, email, password, role, phone, gender, profile_image) VALUES ('$username', '$email', '$passwordHash', 'penjual', '$phone', '$gender', '$profileImagePath')";
 
             if (mysqli_query($koneksi, $sql)) {
-                echo "<script>Swal.fire('Success', 'Registration successful.', 'success').then(() => { window.location.href = '../auth/login/'; });</script>";
+                echo "<script>Swal.fire('Success', 'Registration successful.', 'success').then(() => { window.location.href = '../penjual'; });</script>";
             } else {
                 echo "<script>Swal.fire('Error', 'Terjadi kesalahan dalam pendaftaran.', 'error');</script>";
             }

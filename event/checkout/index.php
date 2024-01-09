@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION["user_id"]; // Get user_id from the session
 
     $nama = mysqli_real_escape_string($koneksi, $_POST["nama"]);
+    $nik = mysqli_real_escape_string($koneksi, $_POST["nik"]);
     $email = mysqli_real_escape_string($koneksi, $_POST["email"]);
     $day = mysqli_real_escape_string($koneksi, $_POST["day"]);
     $month = mysqli_real_escape_string($koneksi, $_POST["month"]);
@@ -46,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $event_id = mysqli_real_escape_string($koneksi, $_POST["event_id"]);
 
     // SQL query to insert data into registrasi_tiket table
-    $sql = "INSERT INTO registrasi_tiket (user_id, nama, email, tanggal_lahir, gender, order_id, event_id, transaction_status, transaction_id)
-            VALUES ('$user_id', '$nama', '$email', '$tanggal_lahir', '$gender', '$order_id', '$event_id', '$transaction_status', '$transaction_id')";
+    $sql = "INSERT INTO registrasi_tiket (user_id, nama, nik, email, tanggal_lahir, gender, order_id, event_id, transaction_status, transaction_id)
+            VALUES ('$user_id', '$nama', '$nik', '$email', '$tanggal_lahir', '$gender', '$order_id', '$event_id', '$transaction_status', '$transaction_id')";
 
     if ($koneksi->query($sql) === TRUE) {
         header("location:../checkout/payment/?event_id=$event_id&order_id=$order_id");
@@ -107,8 +108,10 @@ $koneksi->close();
                     </div>
                     <label for="nama" class="block mt-4 text-sm font-medium dark:text-gray-300">Harga:</label>
                     <input type="text" name="harga" value="<?php echo $harga; ?>" readonly class="mt-1 p-2 w-full border rounded-mdborder border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                    <label for="nik" class="block mt-4 text-sm font-medium dark:text-gray-300">NIK:</label>
+                    <input type="text" name="nik" class="mt-1 p-2 w-full border rounded-mdborder border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <!-- Add three separate input fields for day, month, and year -->
-                    <label class="block mt-4 text-sm font-medium dark:text-gray-300">Tanggal Lahir:</label>
+                    <!-- <label class="block mt-4 text-sm font-medium dark:text-gray-300">Tanggal Lahir:</label>
                     <div class="grid grid-cols-3 gap-2 mt-1">
                         <div>
                             <label for="day" class="sr-only dark:text-gray-300">Day</label>
@@ -122,7 +125,7 @@ $koneksi->close();
                             <label for="year" class="sr-only dark:text-gray-300">Year</label>
                             <input type="number" name="year" id="year" class="p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="YYYY" required>
                         </div>
-                    </div>
+                    </div> -->
                     <label for="gender" class="block mt-4 text-sm font-medium dark:text-gray-300">Gender:</label>
                     <select name="gender" class="mt-1 p-2 w-full border rounded-md border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="male">Male</option>
