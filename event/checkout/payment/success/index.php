@@ -79,7 +79,7 @@ $order_id = $registrasi_data['order_id'];
     <script>
         // Generate QR code using qrcode.js
         var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: "<?php echo $order_id; ?>",
+            text: "<?php echo $order_id; ?>", 
             width: 128,
             height: 128
         });
