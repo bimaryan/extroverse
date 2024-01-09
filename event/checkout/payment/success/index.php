@@ -71,7 +71,7 @@ $order_id = $registrasi_data['order_id'];
             </div>
 
             <div class="mt-4 flex justify-center">
-                <a href="#" class="bg-green-500 text-white rounded-lg px-4 py-2">Continue</a>
+                <a href="http://localhost/extroverse/event/mytransaction/" class="bg-green-500 text-white rounded-lg px-4 py-2">Continue</a>
             </div>
         </div>
     </div>
